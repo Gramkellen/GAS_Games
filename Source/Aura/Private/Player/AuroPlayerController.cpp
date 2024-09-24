@@ -36,6 +36,7 @@ void AAuroPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuroPlayerController::Move);
 }
 
+// 以前就是Bind MoveForward Bind MoveRight这样
 void AAuroPlayerController::Move(const FInputActionValue& ActionValue)
 {
 	// FInputAction起始是一个对应上和右的一个结构体
