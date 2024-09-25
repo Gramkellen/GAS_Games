@@ -13,9 +13,8 @@ AAuroEnemy::AAuroEnemy()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAuroAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
-
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	Attribute = CreateDefaultSubobject<UAuroAttributeSet>("Attribute");
-	
 }
 
 void AAuroEnemy::OnHighlightActor()
@@ -36,4 +35,10 @@ void AAuroEnemy::UnHighlightActor()
 	{
 		Weapon->SetRenderCustomDepth(false);
 	}
+}
+
+void AAuroEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 }

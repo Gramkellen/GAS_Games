@@ -3,7 +3,10 @@
 
 #include "Aura/Public/Character/AuroCharacter.h"
 
+#include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuroAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuroPlayerState.h"
 
 AAuroCharacter::AAuroCharacter()
 {
@@ -18,4 +21,27 @@ AAuroCharacter::AAuroCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+}
+
+void AAuroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	// Initialize Actor Info For Server
+	IntializeAbilityActor();
+}
+
+void AAuroCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	// Intialize Actor Info For Client
+	IntializeAbilityActor();
+}
+
+void AAuroCharacter::IntializeAbilityActor()
+{
+	AAuroPlayerState * AuroPlayerState = GetPlayerState<AAuroPlayerState>();
+	check(AuroPlayerState);
+	AuroPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuroPlayerState,this);
+	AbilitySystemComponent = AuroPlayerState->GetAbilitySystemComponent();
+	Attribute = AuroPlayerState->GetAttribute();
 }

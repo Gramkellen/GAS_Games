@@ -28,4 +28,6 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite,Category="AbilitySystem")
 	TObjectPtr<UAttributeSet>Attribute;
+
+	
 };

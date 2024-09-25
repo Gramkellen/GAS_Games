@@ -21,5 +21,7 @@ public:
 	void OnHighlightActor() override;
 
 	void UnHighlightActor() override;
-	
+
+protected:
+	void BeginPlay() override;
 };
