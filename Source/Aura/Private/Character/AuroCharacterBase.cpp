@@ -11,6 +11,16 @@ AAuroCharacterBase::AAuroCharacterBase()
 	Weapon->SetupAttachment(GetMesh(),FName("WeaponHandleSocket"));
 }
 
+UAbilitySystemComponent* AAuroCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+UAttributeSet* AAuroCharacterBase::GetAttribute() const
+{
+	return Attribute;
+}
+
 void AAuroCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
