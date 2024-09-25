@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuroPlayerController.generated.h"
 
+class IEnemyInterface;
 class UInputMappingContext;
 class UInputAction;
 /**
@@ -24,6 +25,10 @@ protected:
 	void BeginPlay() override;
 
     void SetupInputComponent() override;
+
+	virtual void PlayerTick(float DeltaTime) override;
+	
+	void CursorTrace();
 private:
 	// 映射的上下文
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -33,5 +38,8 @@ private:
 	TObjectPtr<UInputAction>MoveAction;
 
 	void Move(const FInputActionValue& ActionValue);
+
+	TScriptInterface<IEnemyInterface>LastActor;
 	
+	TScriptInterface<IEnemyInterface>CurrentActor;
 };

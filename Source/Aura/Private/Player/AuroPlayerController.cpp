@@ -4,10 +4,12 @@
 #include "Player/AuroPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuroPlayerController::AAuroPlayerController()
 {
 	bReplicates = true;
+	bEnableClickEvents = true;
 }
 
 void AAuroPlayerController::BeginPlay()
@@ -34,6 +36,51 @@ void AAuroPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	UEnhancedInputComponent *EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuroPlayerController::Move);
+}
+
+void AAuroPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	CursorTrace();
+}
+
+void AAuroPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,CursorHit);
+	if(!CursorHit.bBlockingHit) return ; // No Collision
+	LastActor = CurrentActor;
+	CurrentActor = CursorHit.GetActor();
+	/* Diffrent Case About Hit Result
+	 * A. both nullptr
+	 * B. last nullptr but current not nullptr
+	 * C. last not nullptr but current is nullptr
+	 * D. last not nullptr and current not nullptr
+	 *	- last == current
+	 *	- last != current
+	 */
+	if(LastActor == nullptr)
+	{
+		if(CurrentActor!=nullptr)
+		{
+			CurrentActor->OnHighlightActor();
+		}
+	}
+	else
+	{
+		if(CurrentActor!=nullptr)
+		{
+			if(CurrentActor!=LastActor)
+			{
+				LastActor->UnHighlightActor();
+				CurrentActor->OnHighlightActor();
+			}
+		}
+		else
+		{
+			LastActor->UnHighlightActor();
+		}
+	}
 }
 
 // 以前就是Bind MoveForward Bind MoveRight这样
