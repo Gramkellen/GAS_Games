@@ -9,7 +9,7 @@
 #include "AbilitySystem/AuroAttributeSet.h"
 #include "Components/SphereComponent.h"
 
-AAuroEffectActor::AAuroEffectActor()
+AAuroEffectActor::AAuroEffectActor():EffectValue(25.f)
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -39,9 +39,8 @@ void AAuroEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 			UAuroAttributeSet::StaticClass()));
 		// ConstCast 和 const_cast 区别？ ConstCast是UE的宏定义，本质还是调用了 const_cast
 		UAuroAttributeSet* MutableAuroAttributes = const_cast<UAuroAttributeSet*>(AuroAttribute);
-		MutableAuroAttributes->SetHealth(MutableAuroAttributes->GetHealth()+25.f);
+		MutableAuroAttributes->SetHealth(MutableAuroAttributes->GetHealth() + EffectValue);
 		Destroy();
-		
 	}
 }
 

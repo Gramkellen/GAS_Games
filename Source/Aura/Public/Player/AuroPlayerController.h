@@ -39,6 +39,7 @@ private:
 
 	void Move(const FInputActionValue& ActionValue);
 
+	// 使用TScriptInterface，具有引用计数和垃圾回收
 	TScriptInterface<IEnemyInterface>LastActor;
 	
 	TScriptInterface<IEnemyInterface>CurrentActor;

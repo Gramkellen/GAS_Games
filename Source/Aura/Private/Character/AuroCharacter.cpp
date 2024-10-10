@@ -6,7 +6,9 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuroAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuroPlayerController.h"
 #include "Player/AuroPlayerState.h"
+#include "UI/HUD/AuroHUD.h"
 
 AAuroCharacter::AAuroCharacter()
 {
@@ -45,4 +47,12 @@ void AAuroCharacter::IntializeAbilityActor()
 	AuroPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuroPlayerState,this);
 	AbilitySystemComponent = AuroPlayerState->GetAbilitySystemComponent();
 	Attribute = AuroPlayerState->GetAttribute();
+	
+	if(AAuroPlayerController * AuroPlayerController = Cast<AAuroPlayerController>(GetController()))
+	{
+		if(AAuroHUD* AuroHUD = Cast<AAuroHUD>(AuroPlayerController->GetHUD()))
+		{
+			AuroHUD->InitOverlay(AuroPlayerController,AuroPlayerState,AbilitySystemComponent,Attribute);
+		}
+	}
 }

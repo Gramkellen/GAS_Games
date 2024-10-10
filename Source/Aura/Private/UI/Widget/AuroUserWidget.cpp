@@ -3,7 +3,7 @@
 
 #include "UI/Widget/AuroUserWidget.h"
 
-void UAuroUserWidget::SetWidgetControler(UObject* InWidgetController)
+void UAuroUserWidget::SetWidgetController(UObject* InWidgetController)
 {
 	WidgetController = InWidgetController;
 	WidgetControllerSet();

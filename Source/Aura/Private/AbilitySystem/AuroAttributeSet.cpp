@@ -6,9 +6,9 @@
 
 UAuroAttributeSet::UAuroAttributeSet()
 {
-	InitHealth(0.f);
+	InitHealth(50.f);
 	InitMaxHealth(100.f);
-	InitMana(0.f);
+	InitMana(30.f);
 	InitMaxMana(100.f);
 }
 
