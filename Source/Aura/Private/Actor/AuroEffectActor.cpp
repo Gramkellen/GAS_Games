@@ -10,7 +10,7 @@
 #include "AbilitySystem/AuroAttributeSet.h"
 #include "Components/SphereComponent.h"
 
-AAuroEffectActor::AAuroEffectActor()
+AAuroEffectActor::AAuroEffectActor():LevelActor(1.f)
 {
 	PrimaryActorTick.bCanEverTick = false;
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root Component"));
@@ -30,7 +30,8 @@ void AAuroEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 	// 不直接使用Effect,通过一个Handle来管理
-	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.0f,EffectContextHandle);
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, LevelActor,EffectContextHandle);
+	// 这里获取返回值只是为了方便记录EndOverlap时消除对应的Infinite效果
 	const FActiveGameplayEffectHandle ActiveEffectSpecHandle = TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 	// Def 是一个弱指针，通过弱指针来进行访问
 	bool bInfinite = EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
@@ -82,10 +83,9 @@ void AAuroEffectActor::OnEndOverlap(AActor* TargetActor)
 		{
 			if (HandlesTuple.Value == TargetASC)
 			{
-				// 移除 效果
-				TargetASC->RemoveActiveGameplayEffect(HandlesTuple.Key);
+				// 移除 效果 - 每次EndOverlap 移除一个堆叠
+				TargetASC->RemoveActiveGameplayEffect(HandlesTuple.Key, 1);
 				HandlestoRemove.Add(HandlesTuple.Key);
-				
 			}
 		}
 		// 从 Map 中进行移除

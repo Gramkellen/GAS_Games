@@ -72,6 +72,10 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Effects")
 	EEffectRemovalPolicy InfiniteEffectRemovePolicy = EEffectRemovalPolicy::ERP_DoNotRemove;
 
+	// 和Cueve结合可以设置不同的Level，对应Curve的X轴下标
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Attribute|Combat")
+	float LevelActor;
+	
 	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveHandlesMap;
 };
 
