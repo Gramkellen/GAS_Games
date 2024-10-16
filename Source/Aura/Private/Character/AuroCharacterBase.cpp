@@ -21,6 +21,11 @@ UAttributeSet* AAuroCharacterBase::GetAttribute() const
 	return Attribute;
 }
 
+void AAuroCharacterBase::InitAbilityActorInfo()
+{
+	
+}
+
 void AAuroCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

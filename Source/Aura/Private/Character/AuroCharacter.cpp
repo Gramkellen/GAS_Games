@@ -39,12 +39,14 @@ void AAuroCharacter::OnRep_PlayerState()
 	IntializeAbilityActor();
 }
 
-void AAuroCharacter::IntializeAbilityActor()
+void AAuroCharacter::InitAbilityActorInfo()
 {
+	Super::InitAbilityActorInfo();
 	AAuroPlayerState * AuroPlayerState = GetPlayerState<AAuroPlayerState>();
 	check(AuroPlayerState);
 	// 这里对应的其实是拥有者和表现者
 	AuroPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuroPlayerState,this);
+	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	AbilitySystemComponent = AuroPlayerState->GetAbilitySystemComponent();
 	Attribute = AuroPlayerState->GetAttribute();
 	

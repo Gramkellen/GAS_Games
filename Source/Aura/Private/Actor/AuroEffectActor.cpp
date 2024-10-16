@@ -24,6 +24,7 @@ void AAuroEffectActor::BeginPlay()
 
 void AAuroEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
+	// 这里其实是 TargetASC添加了来源地GE，然后ApplyGameplayEffectToSelf
 	// 获取ASC -> 创建Context描述效果的上下文消息 -> 创建效果实例 Spec -> 应用 GE
 	UAbilitySystemComponent *TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	check(GameplayEffectClass);

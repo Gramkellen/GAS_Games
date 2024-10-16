@@ -20,6 +20,7 @@ public:
 
 	virtual void OnRep_PlayerState() override;
 
+	virtual void InitAbilityActorInfo() override;
 private:
 	void IntializeAbilityActor();
 };
