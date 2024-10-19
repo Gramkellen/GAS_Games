@@ -29,14 +29,14 @@ void AAuroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	// Initialize Actor Info For Server
-	IntializeAbilityActor();
+	InitAbilityActorInfo();
 }
 
 void AAuroCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 	// Intialize Actor Info For Client
-	IntializeAbilityActor();
+	InitAbilityActorInfo();
 }
 
 void AAuroCharacter::InitAbilityActorInfo()
