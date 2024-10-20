@@ -1,9 +1,7 @@
 // Copyright kellendeng
-
-
+#include "AbilitySystem/AuroAttributeSet.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
-#include "AbilitySystem/AuroAttributeSet.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Net/UnrealNetwork.h"
 

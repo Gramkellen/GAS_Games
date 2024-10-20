@@ -46,9 +46,9 @@ void AAuroCharacter::InitAbilityActorInfo()
 	check(AuroPlayerState);
 	// 这里对应的其实是拥有者和表现者
 	AuroPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuroPlayerState,this);
-	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	AbilitySystemComponent = AuroPlayerState->GetAbilitySystemComponent();
 	Attribute = AuroPlayerState->GetAttribute();
+	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	
 	if(AAuroPlayerController * AuroPlayerController = Cast<AAuroPlayerController>(GetController()))
 	{
