@@ -46,22 +46,6 @@ public:
 
 	void BindCallbacksToDependencies() override;
 
-	void HealthChanged(const FOnAttributeChangeData& Data) const;
-
-	void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
-
-	void ManaChanged(const FOnAttributeChangeData& Data) const;
-
-	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
-	
-	// 数据表中查找对应的Tag名字的 Row
-	template<typename T>
-	T* GetRowByDataTable(UDataTable* DataTable,const FGameplayTag& Tag);
-
-protected:
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "GAS|Message")
-	TObjectPtr<UDataTable>MessageWidgetDataTable;
-	
 	// 创建委托实例 ，BlueprintAssignable表示委托可以在蓝图中被赋值
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
 	FOnHealthChanged OnHealthChangedDelegate;
@@ -77,6 +61,22 @@ protected:
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|Message")
 	FMessageWidgetDelegate MessageWidgetDelegate;
+
+protected:
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = "GAS|MessageData")
+	TObjectPtr<UDataTable>MessageWidgetDataTable;
+	
+	void HealthChanged(const FOnAttributeChangeData& Data) const;
+
+	void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
+
+	void ManaChanged(const FOnAttributeChangeData& Data) const;
+
+	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
+	
+	// 数据表中查找对应的Tag名字的 Row
+	template<typename T>
+	T* GetRowByDataTable(UDataTable* DataTable,const FGameplayTag& Tag);
 	
 };
 
