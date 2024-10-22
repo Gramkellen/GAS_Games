@@ -7,11 +7,6 @@
 #include "OverlayWidgetController.generated.h"
 
 class UAuroUserWidget;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChanged, float, NewMaxHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChanged, float, NewMana);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChanged, float, NewMaxMana);
-
 // 为了方便根据便签检索和展示信息
 // 定义了表格中每一行的结构样式
 USTRUCT(BlueprintType)
@@ -32,6 +27,13 @@ struct FUIWigetRow : public FTableRowBase
 	UTexture2D* Image = nullptr;
 	
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChanged, float, NewMaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChanged, float, NewMana);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChanged, float, NewMaxMana);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWigetRow,MessageWidget);
+
 /**
  * 
  */
@@ -71,10 +73,7 @@ protected:
 
 	template<typename T>
 	T* GetRowByDataTable(UDataTable* Table,const FGameplayTag& Tag);
-};
 
-template <typename T>
-T* UOverlayWidgetController::GetRowByDataTable(UDataTable* Table,const  FGameplayTag& Tag)
-{
-	return Table.FindRow<T>(Tag.GetTagName(),FString(""));
-}
+	UPROPERTY(BlueprintCallable,Category="GAS|Message")
+	FMessageWidgetDelegate MessageWidgetDelegate;
+};

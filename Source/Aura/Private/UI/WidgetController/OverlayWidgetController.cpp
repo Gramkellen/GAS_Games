@@ -32,12 +32,14 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AssetTagsDelegate.AddLambda(
 		[this](const FGameplayTagContainer& TagContainer)->void
 		{
+			FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
 			for(const FGameplayTag &Tag : TagContainer)
 			{
-				FString Msg = FString::Printf(TEXT("Game play Tag : %s"),*Tag.ToString());
-				GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,Msg);
-				// Lambda访问的时候需要进行捕获
-				FUIWigetRow* Row = GetRowByDataTable<FUIWigetRow>(MessageWidgetDataTable,Tag);
+				if(Tag.MatchesTag(MessageTag))
+				{
+					const FUIWigetRow* Row = GetRowByDataTable<FUIWigetRow>(MessageWidgetDataTable,Tag);
+					MessageWidgetDelegate.Broadcast(*Row);
+				}
 			}
 		}
 	);
