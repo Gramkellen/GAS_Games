@@ -53,9 +53,13 @@ public:
 	void ManaChanged(const FOnAttributeChangeData& Data) const;
 
 	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
+	
+	// 数据表中查找对应的Tag名字的 Row
+	template<typename T>
+	T* GetRowByDataTable(UDataTable* DataTable,const FGameplayTag& Tag);
 
 protected:
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Message")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "GAS|Message")
 	TObjectPtr<UDataTable>MessageWidgetDataTable;
 	
 	// 创建委托实例 ，BlueprintAssignable表示委托可以在蓝图中被赋值
@@ -71,9 +75,13 @@ protected:
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
 	FOnManaChanged OnMaxManaChangedDelegate;
 
-	template<typename T>
-	T* GetRowByDataTable(UDataTable* Table,const FGameplayTag& Tag);
-
-	UPROPERTY(BlueprintCallable,Category="GAS|Message")
+	UPROPERTY(BlueprintAssignable,Category="GAS|Message")
 	FMessageWidgetDelegate MessageWidgetDelegate;
+	
 };
+
+template <typename T>
+T* UOverlayWidgetController::GetRowByDataTable(UDataTable* DataTable, const FGameplayTag& Tag)
+{
+	return DataTable->FindRow<T>(Tag.GetTagName(),TEXT(""));
+}

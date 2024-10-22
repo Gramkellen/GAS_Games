@@ -14,7 +14,4 @@ void UAuroAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* Ability
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
 	AssetTagsDelegate.Broadcast(TagContainer);
-	
-	
-	
 }

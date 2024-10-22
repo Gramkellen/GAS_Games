@@ -7,4 +7,5 @@ void UAuroUserWidget::SetWidgetController(UObject* InWidgetController)
 {
 	WidgetController = InWidgetController;
 	WidgetControllerSet();
+	
 }
