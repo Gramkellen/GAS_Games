@@ -23,7 +23,7 @@ public:
 
 	UAttributeSet* GetAttribute()const ;
 protected:
-	UPROPERTY(BlueprintReadOnly,Category="AbilitySystem")
+	UPROPERTY(VisibleAnywhere,Category="AbilitySystem")
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
 	UPROPERTY(BlueprintReadWrite,Category="AbilitySystem")

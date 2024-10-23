@@ -9,6 +9,7 @@
 
 class UAbilitySystemComponent;
 class UAttributeSet;
+class UGameplayEffect;
 
 UCLASS(Abstract)
 class AURA_API AAuroCharacterBase : public ACharacter,public IAbilitySystemInterface
@@ -30,9 +31,15 @@ protected:
 	UPROPERTY(EditAnywhere,Category="Combat")
 	TObjectPtr<USkeletalMeshComponent>Weapon;
 
-	UPROPERTY(BlueprintReadOnly,Category="AbilitySystem")
+	UPROPERTY(VisibleAnywhere,Category ="AbilitySystem")
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
 	UPROPERTY(BlueprintReadWrite,Category="AbilitySystem")
 	TObjectPtr<UAttributeSet>Attribute;
+
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category = "Primary Attribute")
+	TSubclassOf<UGameplayEffect>DefaultPrimaryAttributesClass;
+
+	void InitializePrimaryAttributes() const;
+	
 };

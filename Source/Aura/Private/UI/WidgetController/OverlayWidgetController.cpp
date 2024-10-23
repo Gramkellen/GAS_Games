@@ -21,13 +21,29 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	// UE自带的属性改变委托
 	const UAuroAttributeSet *AuroAttributeSet = Cast<UAuroAttributeSet>(AttributeSet);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuroAttributeSet->GetHealthAttribute())
-	                       .AddUObject(this,&UOverlayWidgetController::HealthChanged);
+	                       .AddLambda(
+	                       	[this](const FOnAttributeChangeData& Data)->void
+	                       	{
+	                       		OnHealthChangedDelegate.Broadcast(Data.NewValue);
+	                       	});
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuroAttributeSet->GetMaxHealthAttribute())
-						   .AddUObject(this,&UOverlayWidgetController::MaxHealthChanged);
+	                      .AddLambda(
+		                      [this](const FOnAttributeChangeData& Data)-> void
+		                      {
+			                      OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
+		                      });
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuroAttributeSet->GetManaAttribute())
-	                       .AddUObject(this, &UOverlayWidgetController::ManaChanged);
+	                      .AddLambda(
+		                      [this](const FOnAttributeChangeData& Data)-> void
+		                      {
+			                      OnManaChangedDelegate.Broadcast(Data.NewValue);
+		                      });
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuroAttributeSet->GetMaxManaAttribute())
-	                       .AddUObject(this,&UOverlayWidgetController::MaxManaChanged);
+	                      .AddLambda(
+		                      [this](const FOnAttributeChangeData& Data)-> void
+		                      {
+			                      OnMaxManaChangedDelegate.Broadcast(Data.NewValue);
+		                      });
 
 	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AssetTagsDelegate.AddLambda(
 		[this](const FGameplayTagContainer& TagContainer)->void
@@ -37,30 +53,12 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			{
 				if(Tag.MatchesTag(MessageTag))
 				{
-					FUIWigetRow* Row = GetRowByDataTable<FUIWigetRow>(MessageWidgetDataTable,Tag);
-					MessageWidgetDelegate.Broadcast(*Row);
+					if(FUIWigetRow* Row = GetRowByDataTable<FUIWigetRow>(MessageWidgetDataTable,Tag))
+					{
+						MessageWidgetDelegate.Broadcast(*Row);
+					}
 				}
 			}
 		}
 	);
-}
-
-void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
-{
-	OnHealthChangedDelegate.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data) const
-{
-	OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Data) const
-{
-	OnManaChangedDelegate.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data) const
-{
-	OnMaxManaChangedDelegate.Broadcast(Data.NewValue);
 }

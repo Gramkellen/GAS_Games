@@ -49,7 +49,7 @@ void AAuroCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent = AuroPlayerState->GetAbilitySystemComponent();
 	Attribute = AuroPlayerState->GetAttribute();
 	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-	
+	InitializePrimaryAttributes();
 	if(AAuroPlayerController * AuroPlayerController = Cast<AAuroPlayerController>(GetController()))
 	{
 		if(AAuroHUD* AuroHUD = Cast<AAuroHUD>(AuroPlayerController->GetHUD()))

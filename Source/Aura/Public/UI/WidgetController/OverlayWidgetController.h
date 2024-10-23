@@ -27,11 +27,7 @@ struct FUIWigetRow : public FTableRowBase
 	UTexture2D* Image = nullptr;
 	
 };
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChanged, float, NewMaxHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChanged, float, NewMana);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChanged, float, NewMaxMana);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeChangedDelegate, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWigetRow,MessageWidget);
 
 /**
@@ -48,16 +44,16 @@ public:
 
 	// 创建委托实例 ，BlueprintAssignable表示委托可以在蓝图中被赋值
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FOnHealthChanged OnHealthChangedDelegate;
+	FAttributeChangedDelegate OnHealthChangedDelegate;
 	
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FOnMaxHealthChanged OnMaxHealthChangedDelegate;
+	FAttributeChangedDelegate OnMaxHealthChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FOnManaChanged OnManaChangedDelegate;
+	FAttributeChangedDelegate OnManaChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FOnManaChanged OnMaxManaChangedDelegate;
+	FAttributeChangedDelegate OnMaxManaChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|Message")
 	FMessageWidgetDelegate MessageWidgetDelegate;
@@ -66,18 +62,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = "GAS|MessageData")
 	TObjectPtr<UDataTable>MessageWidgetDataTable;
 	
-	void HealthChanged(const FOnAttributeChangeData& Data) const;
-
-	void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
-
-	void ManaChanged(const FOnAttributeChangeData& Data) const;
-
-	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
-	
 	// 数据表中查找对应的Tag名字的 Row
 	template<typename T>
 	T* GetRowByDataTable(UDataTable* DataTable,const FGameplayTag& Tag);
-	
 };
 
 template <typename T>

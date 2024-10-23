@@ -72,19 +72,37 @@ public:
 	// #param FGameplayEffectModCallbackData - 需要添加 EffectExtension头文件，参考官网
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Health, Category = "Attribute|Combat")
+	// Primary Properties
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Strength, Category = "Attribute|PrimaryProperties")
+	FGameplayAttributeData Strength;
+	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,Strength);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Intelligence, Category = "Attribute|PrimaryProperties")
+	FGameplayAttributeData Intelligence;
+	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,Intelligence);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Resilience, Category = "Attribute|PrimaryProperties")
+	FGameplayAttributeData Resilience;
+	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,Resilience);
+
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Vigor, Category = "Attribute|PrimaryProperties")
+	FGameplayAttributeData Vigor;
+	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,Vigor);
+	
+	// Vital Properties
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Health, Category = "Attribute|VitalProperties")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,Health);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxHealth, Category = "Attribute|Combat")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxHealth, Category = "Attribute|VitalProperties")
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,MaxHealth);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Mana, Category = "Attribute|Combat")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Mana, Category = "Attribute|VitalProperties")
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,Mana);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxMana, Category = "Attribute|Combat")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxMana, Category = "Attribute|VitalProperties")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UAuroAttributeSet,MaxMana);
 	
@@ -101,7 +119,17 @@ public:
 	UFUNCTION()
 	void Rep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
 
-	
+	UFUNCTION()
+	void Rep_Strength(const FGameplayAttributeData& OldStrength) const;
+
+	UFUNCTION()
+	void Rep_Intelligence(const FGameplayAttributeData& OldIntelligence) const;
+
+	UFUNCTION()
+	void Rep_Resilience(const FGameplayAttributeData& OldResilience) const;
+
+	UFUNCTION()
+	void Rep_Vigor(const FGameplayAttributeData& OldVigor) const;
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };
