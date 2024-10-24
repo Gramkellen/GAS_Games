@@ -37,7 +37,8 @@ void AAuroCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 {
 	check(IsValid(GetAbilitySystemComponent()));
 	check(GameplayEffectClass);
-	const FGameplayEffectContextHandle EffectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	FGameplayEffectContextHandle EffectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle EffectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass,1.f,EffectContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(),GetAbilitySystemComponent());
 }
@@ -46,6 +47,7 @@ void AAuroCharacterBase::InitializeDefaultAttribute() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributesClass,1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributeClass,1.f);
+	ApplyEffectToSelf(DefaultVitalAttributeClass,1.f);
 }
 
 
