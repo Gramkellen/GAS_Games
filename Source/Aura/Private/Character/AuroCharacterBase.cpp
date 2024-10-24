@@ -33,14 +33,19 @@ void AAuroCharacterBase::BeginPlay()
 	
 }
 
-void AAuroCharacterBase::InitializePrimaryAttributes() const
+void AAuroCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
 {
 	check(IsValid(GetAbilitySystemComponent()));
-	check(DefaultPrimaryAttributesClass);
-	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
-	const FGameplayEffectSpecHandle EffectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultPrimaryAttributesClass,1.f, ContextHandle);
-	// Spec会应用自定义的效果规格，No Spec应用默认的效果
+	check(GameplayEffectClass);
+	const FGameplayEffectContextHandle EffectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	const FGameplayEffectSpecHandle EffectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass,1.f,EffectContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(),GetAbilitySystemComponent());
+}
+
+void AAuroCharacterBase::InitializeDefaultAttribute() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttributesClass,1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttributeClass,1.f);
 }
 
 

@@ -8,9 +8,7 @@
 UAuroAttributeSet::UAuroAttributeSet()
 {
 	InitHealth(100.f);
-	InitMaxHealth(100.f);
 	InitMana(60.f);
-	InitMaxMana(100.f);
 }
 
 void UAuroAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -34,6 +32,22 @@ void UAuroAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Resilience,COND_None,REPNOTIFY_Always);
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Vigor,COND_None,REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Armor,COND_None,REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,ArmorPenetration,COND_None,REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,BlockChance,COND_None,REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,CriticalHitChance,COND_None,REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,CriticalHitDamage,COND_None,REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,CriticalHitResistance,COND_None,REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,HealthRegeneration,COND_None,REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
 }
 
 
@@ -47,7 +61,7 @@ void UAuroAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	}
 	if(Attribute == GetManaAttribute())
 	{
-		NewValue = FMath::Clamp(NewValue,0,GetMaxHealth());
+		NewValue = FMath::Clamp(NewValue,0,GetMaxMana());
 	}
 }
 
@@ -140,6 +154,46 @@ void UAuroAttributeSet::Rep_Resilience(const FGameplayAttributeData& OldResilien
 void UAuroAttributeSet::Rep_Vigor(const FGameplayAttributeData& OldVigor) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Vigor,OldVigor);
+}
+
+void UAuroAttributeSet::Rep_Armor(const FGameplayAttributeData& OldArmor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Armor,OldArmor);
+}
+
+void UAuroAttributeSet::Rep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,ArmorPenetration,OldArmorPenetration);
+}
+
+void UAuroAttributeSet::Rep_BlockChance(const FGameplayAttributeData& OldBlockChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,BlockChance,OldBlockChance);
+}
+
+void UAuroAttributeSet::Rep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,CriticalHitChance,OldCriticalHitChance);
+}
+
+void UAuroAttributeSet::Rep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,CriticalHitDamage,OldCriticalHitDamage);
+}
+
+void UAuroAttributeSet::Rep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,CriticalHitResistance,OldCriticalHitResistance);
+}
+
+void UAuroAttributeSet::Rep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,HealthRegeneration,OldHealthRegeneration);
+}
+
+void UAuroAttributeSet::Rep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,ManaRegeneration,OldManaRegeneration);
 }
 
 
