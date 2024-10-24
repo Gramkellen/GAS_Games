@@ -58,3 +58,9 @@ void AAuroCharacter::InitAbilityActorInfo()
 	}
 	InitializeDefaultAttribute();
 }
+
+int32 AAuroCharacter::GetPlayerLevel()
+{
+	const AAuroPlayerState* AuroPlayerState = GetPlayerState<AAuroPlayerState>();
+	return AuroPlayerState->GetPlayerLevel();
+}

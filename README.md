@@ -81,3 +81,7 @@
   数值计算公式：Max Mana: (Intelligece+ 5 ） * 1.2
 
 ![image-20241024124413560](https://jiyidatabase.oss-cn-shanghai.aliyuncs.com/typora/202410241244153.png)
+
+### 实现思考
+
+等级未必要设置为Attribute，Attribute有时候更像是一种复杂的关联属性

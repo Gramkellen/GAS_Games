@@ -23,6 +23,12 @@ public:
 	void UnHighlightActor() override;
 
 	virtual void InitAbilityActorInfo() override;
+
+	virtual  int32 GetPlayerLevel() override;
+	
 protected:
 	void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Level")
+	int32 PlayerLevel = 1;
 };

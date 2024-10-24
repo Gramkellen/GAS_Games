@@ -43,6 +43,11 @@ void AAuroEnemy::InitAbilityActorInfo()
 	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
 
+int32 AAuroEnemy::GetPlayerLevel()
+{
+	return PlayerLevel;
+}
+
 void AAuroEnemy::BeginPlay()
 {
 	Super::BeginPlay();
