@@ -3,12 +3,12 @@
 
 #include "AbilitySystem/MMC/MMC_MaxMana.h"
 
-#include "AbilitySystem/AuroAttributeSet.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Interaction/CombatInterface.h"
 
 UMMC_MaxMana::UMMC_MaxMana()
 {
-	IntelligenceDef.AttributeToCapture = UAuroAttributeSet::GetIntelligenceAttribute();
+	IntelligenceDef.AttributeToCapture = UAuraAttributeSet::GetIntelligenceAttribute();
 	IntelligenceDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
 	IntelligenceDef.bSnapshot = false;
 }

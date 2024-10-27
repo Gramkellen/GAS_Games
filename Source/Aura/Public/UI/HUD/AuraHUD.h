@@ -4,25 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "AuroHUD.generated.h"
+#include "AuraHUD.generated.h"
 
 struct FWidgetControllerParams;
 class UOverlayWidgetController;
 class UAttributeSet;
 class UAbilitySystemComponent;
-class UAuroWidgetController;
-class UAuroUserWidget;
+class UAuraWidgetController;
+class UAuraUserWidget;
 /**
  * 
  */
 UCLASS()
-class AURA_API AAuroHUD : public AHUD
+class AURA_API AAuraHUD : public AHUD
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY()
-	TObjectPtr<UAuroUserWidget>OverlayWidget;
+	TObjectPtr<UAuraUserWidget>OverlayWidget;
 
 	UPROPERTY()
 	TObjectPtr<UOverlayWidgetController>OverlayWidgetController;
@@ -35,8 +35,8 @@ public:
 	
 private:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UAuroUserWidget>OverlayWidgetClass;
+	TSubclassOf<UAuraUserWidget>OverlayWidgetClass;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UAuroWidgetController>OverlayWidgetControllerClass;
+	TSubclassOf<UAuraWidgetController>OverlayWidgetControllerClass;
 };

@@ -1,58 +1,58 @@
 // Copyright kellendeng
-#include "AbilitySystem/AuroAttributeSet.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Net/UnrealNetwork.h"
 
-UAuroAttributeSet::UAuroAttributeSet()
+UAuraAttributeSet::UAuraAttributeSet()
 {
 	InitHealth(100.f);
 	InitMana(60.f);
 }
 
-void UAuroAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	// 默认是 Changed才通知，ALways是希望更新值，但是值和原来一样的时候也能做些事情
 	// 这里是将网络同步的属性进行注册
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Health,COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Health,COND_None, REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,MaxHealth,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,MaxHealth,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Mana,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Mana,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Strength,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Strength,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Intelligence,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Intelligence,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Resilience,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Resilience,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Vigor,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Vigor,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,Armor,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Armor,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,ArmorPenetration,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,ArmorPenetration,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,BlockChance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,BlockChance,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,CriticalHitChance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,CriticalHitChance,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,CriticalHitDamage,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,CriticalHitDamage,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,CriticalHitResistance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,CriticalHitResistance,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,HealthRegeneration,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,HealthRegeneration,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuroAttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
 }
 
 
 // CurrentValue被NewValue改变之前进行调用
-void UAuroAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 	if(Attribute == GetHealthAttribute())
@@ -65,7 +65,7 @@ void UAuroAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	}
 }
 
-void UAuroAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
+void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
 {
 	Props.EffectContextHandle = Data.EffectSpec.GetContext();
 	// 获取Source 的 GameplayAbilitySystem
@@ -99,7 +99,7 @@ void UAuroAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 }
 
 // 应用GE的效果
-void UAuroAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
 	FEffectProperties Props;
@@ -117,83 +117,83 @@ void UAuroAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 // GAMEPLAYATTRIBUTE_REPNOTIFY 宏用来通知客户端服务器的属性已经改变
 // 网络复制属性时回调以下对应的函数
-void UAuroAttributeSet::Rep_Health(const FGameplayAttributeData& OldHealth) const
+void UAuraAttributeSet::Rep_Health(const FGameplayAttributeData& OldHealth) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Health,OldHealth);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Health,OldHealth);
 }
-void UAuroAttributeSet::Rep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const
+void UAuraAttributeSet::Rep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,MaxHealth,OldMaxHealth);
-}
-
-void UAuroAttributeSet::Rep_Mana(const FGameplayAttributeData& OldMana) const
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Mana,OldMana);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,MaxHealth,OldMaxHealth);
 }
 
-void UAuroAttributeSet::Rep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
+void UAuraAttributeSet::Rep_Mana(const FGameplayAttributeData& OldMana) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,MaxMana,OldMaxMana)
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Mana,OldMana);
 }
 
-void UAuroAttributeSet::Rep_Strength(const FGameplayAttributeData& OldStrength) const
+void UAuraAttributeSet::Rep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Strength,OldStrength)
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,MaxMana,OldMaxMana)
 }
 
-void UAuroAttributeSet::Rep_Intelligence(const FGameplayAttributeData& OldIntelligence) const
+void UAuraAttributeSet::Rep_Strength(const FGameplayAttributeData& OldStrength) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Intelligence,OldIntelligence);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Strength,OldStrength)
 }
 
-void UAuroAttributeSet::Rep_Resilience(const FGameplayAttributeData& OldResilience) const
+void UAuraAttributeSet::Rep_Intelligence(const FGameplayAttributeData& OldIntelligence) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Resilience,OldResilience);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Intelligence,OldIntelligence);
 }
 
-void UAuroAttributeSet::Rep_Vigor(const FGameplayAttributeData& OldVigor) const
+void UAuraAttributeSet::Rep_Resilience(const FGameplayAttributeData& OldResilience) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Vigor,OldVigor);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resilience,OldResilience);
 }
 
-void UAuroAttributeSet::Rep_Armor(const FGameplayAttributeData& OldArmor) const
+void UAuraAttributeSet::Rep_Vigor(const FGameplayAttributeData& OldVigor) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,Armor,OldArmor);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Vigor,OldVigor);
 }
 
-void UAuroAttributeSet::Rep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const
+void UAuraAttributeSet::Rep_Armor(const FGameplayAttributeData& OldArmor) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,ArmorPenetration,OldArmorPenetration);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Armor,OldArmor);
 }
 
-void UAuroAttributeSet::Rep_BlockChance(const FGameplayAttributeData& OldBlockChance) const
+void UAuraAttributeSet::Rep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,BlockChance,OldBlockChance);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,ArmorPenetration,OldArmorPenetration);
 }
 
-void UAuroAttributeSet::Rep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const
+void UAuraAttributeSet::Rep_BlockChance(const FGameplayAttributeData& OldBlockChance) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,CriticalHitChance,OldCriticalHitChance);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,BlockChance,OldBlockChance);
 }
 
-void UAuroAttributeSet::Rep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const
+void UAuraAttributeSet::Rep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,CriticalHitDamage,OldCriticalHitDamage);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,CriticalHitChance,OldCriticalHitChance);
 }
 
-void UAuroAttributeSet::Rep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const
+void UAuraAttributeSet::Rep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,CriticalHitResistance,OldCriticalHitResistance);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,CriticalHitDamage,OldCriticalHitDamage);
 }
 
-void UAuroAttributeSet::Rep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const
+void UAuraAttributeSet::Rep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,HealthRegeneration,OldHealthRegeneration);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,CriticalHitResistance,OldCriticalHitResistance);
 }
 
-void UAuroAttributeSet::Rep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
+void UAuraAttributeSet::Rep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuroAttributeSet,ManaRegeneration,OldManaRegeneration);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,HealthRegeneration,OldHealthRegeneration);
+}
+
+void UAuraAttributeSet::Rep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,ManaRegeneration,OldManaRegeneration);
 }
 
 

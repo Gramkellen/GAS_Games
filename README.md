@@ -85,3 +85,9 @@
 ### 实现思考
 
 等级未必要设置为Attribute，Attribute有时候更像是一种复杂的关联属性
+
+补充学习：
+
+1. Draw As Border的作用和含义
+2. Overlay当中Auto和Fill
+3. Wrap Box

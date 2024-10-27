@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameplayEffectTypes.h"
-#include "AuroEffectActor.generated.h"
+#include "AuraEffectActor.generated.h"
 
 class UAbilitySystemComponent;
 struct FActiveGameplayEffectHandle;
@@ -29,12 +29,12 @@ enum class EEffectRemovalPolicy
 };
 
 UCLASS()
-class AURA_API AAuroEffectActor : public AActor
+class AURA_API AAuraEffectActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AAuroEffectActor();
+	AAuraEffectActor();
 
 protected:
 	virtual void BeginPlay() override;

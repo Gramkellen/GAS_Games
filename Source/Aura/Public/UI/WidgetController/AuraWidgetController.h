@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/AuroAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "UObject/NoExportTypes.h"
-#include "AuroWidgetController.generated.h"
+#include "AuraWidgetController.generated.h"
 
 
 // 表示可以在蓝图中进行使用，该结构体主要用于初始化使用
@@ -35,12 +35,12 @@ struct  FWidgetControllerParams
  * 
  */
 UCLASS()
-class AURA_API UAuroWidgetController : public UObject
+class AURA_API UAuraWidgetController : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	void SetAuroWidgetController(const FWidgetControllerParams& Params);
+	void SetAuraWidgetController(const FWidgetControllerParams& Params);
 
 	virtual void BroadcastIntialValues();
 
@@ -52,7 +52,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly,Category = "WidgetController")
 	TObjectPtr<APlayerState>PlayerState;
 
-	// 这里为什么不用Auro的？
+	// 这里为什么不用Aura的？
 	UPROPERTY(BlueprintReadOnly,Category = "WidgetController")
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 

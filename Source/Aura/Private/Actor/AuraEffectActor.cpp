@@ -1,28 +1,28 @@
 // Copyright kellendeng
 
 
-#include "Actor/AuroEffectActor.h"
+#include "Actor/AuraEffectActor.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "AttributeSet.h"
-#include "AbilitySystem/AuroAttributeSet.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Components/SphereComponent.h"
 
-AAuroEffectActor::AAuroEffectActor():LevelActor(1.f)
+AAuraEffectActor::AAuraEffectActor():LevelActor(1.f)
 {
 	PrimaryActorTick.bCanEverTick = false;
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root Component"));
 }
 
-void AAuroEffectActor::BeginPlay()
+void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-void AAuroEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
 	// 这里其实是 TargetASC添加了来源地GE，然后ApplyGameplayEffectToSelf
 	// 获取ASC -> 创建Context描述效果的上下文消息 -> 创建效果实例 Spec -> 应用 GE
@@ -42,7 +42,7 @@ void AAuroEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	}
 }
 
-void AAuroEffectActor::OnOverlap(AActor* TargetActor)
+void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if(InstantApplicationPolicy == EEffectApplicationPolicy::EAP_ApplyOnOverlap)
 	{
@@ -58,7 +58,7 @@ void AAuroEffectActor::OnOverlap(AActor* TargetActor)
 	}
 }
 
-void AAuroEffectActor::OnEndOverlap(AActor* TargetActor)
+void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 {
 	if(InstantApplicationPolicy == EEffectApplicationPolicy::EAP_ApplyOnEndOverlap)
 	{

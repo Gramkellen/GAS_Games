@@ -1,18 +1,18 @@
 // Copyright kellendeng
 
 
-#include "Player/AuroPlayerController.h"
+#include "Player/AuraPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Interaction/EnemyInterface.h"
 
-AAuroPlayerController::AAuroPlayerController()
+AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
 	bEnableClickEvents = true;
 }
 
-void AAuroPlayerController::BeginPlay()
+void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	check(Context);
@@ -31,20 +31,20 @@ void AAuroPlayerController::BeginPlay()
 	}
 }
 
-void AAuroPlayerController::SetupInputComponent()
+void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	UEnhancedInputComponent *EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuroPlayerController::Move);
+	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
 }
 
-void AAuroPlayerController::PlayerTick(float DeltaTime)
+void AAuraPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 	CursorTrace();
 }
 
-void AAuroPlayerController::CursorTrace()
+void AAuraPlayerController::CursorTrace()
 {
 	FHitResult CursorHit;
 	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,CursorHit);
@@ -84,7 +84,7 @@ void AAuroPlayerController::CursorTrace()
 }
 
 // 以前就是Bind MoveForward Bind MoveRight这样
-void AAuroPlayerController::Move(const FInputActionValue& ActionValue)
+void AAuraPlayerController::Move(const FInputActionValue& ActionValue)
 {
 	// FInputAction起始是一个对应上和右的一个结构体
 	const FVector2D InputAxisVector = ActionValue.Get<FVector2D>();

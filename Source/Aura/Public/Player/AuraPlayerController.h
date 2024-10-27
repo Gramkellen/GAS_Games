@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
-#include "AuroPlayerController.generated.h"
+#include "AuraPlayerController.generated.h"
 
 class IEnemyInterface;
 class UInputMappingContext;
@@ -14,12 +14,12 @@ class UInputAction;
  * 
  */
 UCLASS()
-class AURA_API AAuroPlayerController : public APlayerController
+class AURA_API AAuraPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
 public:
-	AAuroPlayerController();
+	AAuraPlayerController();
 
 protected:
 	void BeginPlay() override;

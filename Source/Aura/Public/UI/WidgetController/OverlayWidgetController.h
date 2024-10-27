@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UI/WidgetController/AuroWidgetController.h"
+#include "UI/WidgetController/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
-class UAuroUserWidget;
+class UAuraUserWidget;
 // 为了方便根据便签检索和展示信息
 // 定义了表格中每一行的结构样式
 USTRUCT(BlueprintType)
@@ -21,7 +21,7 @@ struct FUIWigetRow : public FTableRowBase
 	FText MessageText = FText();
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	TSubclassOf<UAuroUserWidget> MessageWidget;
+	TSubclassOf<UAuraUserWidget> MessageWidget;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	UTexture2D* Image = nullptr;
@@ -34,7 +34,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWigetRow,M
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class AURA_API UOverlayWidgetController : public UAuroWidgetController
+class AURA_API UOverlayWidgetController : public UAuraWidgetController
 {
 	GENERATED_BODY()
 public:

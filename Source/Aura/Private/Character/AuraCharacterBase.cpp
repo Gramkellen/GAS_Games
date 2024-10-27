@@ -1,10 +1,10 @@
 // Copyright kellendeng
-#include "Aura/Public/Character/AuroCharacterBase.h"
+#include "Aura/Public/Character/AuraCharacterBase.h"
 #include "AbilitySystemComponent.h"
 
 
 // Sets default values
-AAuroCharacterBase::AAuroCharacterBase()
+AAuraCharacterBase::AAuraCharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -12,28 +12,28 @@ AAuroCharacterBase::AAuroCharacterBase()
 	Weapon->SetupAttachment(GetMesh(),FName("WeaponHandleSocket"));
 }
 
-UAbilitySystemComponent* AAuroCharacterBase::GetAbilitySystemComponent() const
+UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
 
-UAttributeSet* AAuroCharacterBase::GetAttribute() const
+UAttributeSet* AAuraCharacterBase::GetAttribute() const
 {
 	return Attribute;
 }
 
-void AAuroCharacterBase::InitAbilityActorInfo()
+void AAuraCharacterBase::InitAbilityActorInfo()
 {
 	
 }
 
-void AAuroCharacterBase::BeginPlay()
+void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-void AAuroCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
+void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
 {
 	check(IsValid(GetAbilitySystemComponent()));
 	check(GameplayEffectClass);
@@ -43,7 +43,7 @@ void AAuroCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(),GetAbilitySystemComponent());
 }
 
-void AAuroCharacterBase::InitializeDefaultAttribute() const
+void AAuraCharacterBase::InitializeDefaultAttribute() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributesClass,1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributeClass,1.f);

@@ -1,23 +1,23 @@
 // Copyright kellendeng
 
 
-#include "Aura/Public/Character/AuroEnemy.h"
+#include "Aura/Public/Character/AuraEnemy.h"
 
-#include "AbilitySystem/AuroAbilitySystemComponent.h"
-#include "AbilitySystem/AuroAttributeSet.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Aura/Aura.h"
 
-AAuroEnemy::AAuroEnemy()
+AAuraEnemy::AAuraEnemy()
 {
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility,ECR_Block);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAuroAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
-	Attribute = CreateDefaultSubobject<UAuroAttributeSet>("Attribute");
+	Attribute = CreateDefaultSubobject<UAuraAttributeSet>("Attribute");
 }
 
-void AAuroEnemy::OnHighlightActor()
+void AAuraEnemy::OnHighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(true);
 	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
@@ -28,7 +28,7 @@ void AAuroEnemy::OnHighlightActor()
 	}
 }
 
-void AAuroEnemy::UnHighlightActor()
+void AAuraEnemy::UnHighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	if(Weapon)
@@ -37,18 +37,18 @@ void AAuroEnemy::UnHighlightActor()
 	}
 }
 
-void AAuroEnemy::InitAbilityActorInfo()
+void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
-	Cast<UAuroAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
 
-int32 AAuroEnemy::GetPlayerLevel()
+int32 AAuraEnemy::GetPlayerLevel()
 {
 	return PlayerLevel;
 }
 
-void AAuroEnemy::BeginPlay()
+void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();

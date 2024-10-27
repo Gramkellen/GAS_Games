@@ -6,20 +6,20 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "Interaction/CombatInterface.h"
-#include "AuroCharacterBase.generated.h"
+#include "AuraCharacterBase.generated.h"
 
 class UAbilitySystemComponent;
 class UAttributeSet;
 class UGameplayEffect;
 
 UCLASS(Abstract)
-class AURA_API AAuroCharacterBase : public ACharacter,public IAbilitySystemInterface,public ICombatInterface
+class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface,public ICombatInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AAuroCharacterBase();
+	AAuraCharacterBase();
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 

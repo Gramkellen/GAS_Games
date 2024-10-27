@@ -3,12 +3,12 @@
 
 #include "AbilitySystem/MMC/MMC_MaxHealth.h"
 
-#include "AbilitySystem/AuroAttributeSet.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Interaction/CombatInterface.h"
 
 UMMC_MaxHealth::UMMC_MaxHealth()
 {
-	VigorDef.AttributeToCapture = UAuroAttributeSet::GetVigorAttribute();
+	VigorDef.AttributeToCapture = UAuraAttributeSet::GetVigorAttribute();
 	// 可以选择捕获施法者还是目标的属性
 	VigorDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
 	VigorDef.bSnapshot = false;

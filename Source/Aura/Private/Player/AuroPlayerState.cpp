@@ -1,38 +1,38 @@
 // Copyright kellendeng
 
 
-#include "Player/AuroPlayerState.h"
-#include "AbilitySystem/AuroAbilitySystemComponent.h"
-#include "AbilitySystem/AuroAttributeSet.h"
+#include "Player/AuraPlayerState.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 
-AAuroPlayerState::AAuroPlayerState()
+AAuraPlayerState::AAuraPlayerState()
 {
 	NetUpdateFrequency = 100.f;
 	
-	AbilitySystemComponent = CreateDefaultSubobject<UAuroAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
-	Attribute = CreateDefaultSubobject<UAuroAttributeSet>("Attribute");
+	Attribute = CreateDefaultSubobject<UAuraAttributeSet>("Attribute");
 }
 
-UAbilitySystemComponent* AAuroPlayerState::GetAbilitySystemComponent() const
+UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
 
-void AAuroPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AAuroPlayerState,PlayerLevel);
+	DOREPLIFETIME(AAuraPlayerState,PlayerLevel);
 }
 
-UAttributeSet* AAuroPlayerState::GetAttribute() const
+UAttributeSet* AAuraPlayerState::GetAttribute() const
 {
 	return Attribute;
 }
 
-void AAuroPlayerState::OnRep_PlayerLevel(int32 OldPlayerLevel)
+void AAuraPlayerState::OnRep_PlayerLevel(int32 OldPlayerLevel)
 {
 	
 }
