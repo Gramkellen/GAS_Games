@@ -5,7 +5,7 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 
 // 设置初始化的值并进行广播，委托的事件写在了蓝图里面
-void UOverlayWidgetController::BroadcastIntialValues()
+void UOverlayWidgetController::BroadcastInitialValues()
 {
 	if(UAuraAttributeSet* AuraAttribute = Cast<UAuraAttributeSet>(AttributeSet))
 	{
@@ -53,7 +53,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			{
 				if(Tag.MatchesTag(MessageTag))
 				{
-					if(FUIWigetRow* Row = GetRowByDataTable<FUIWigetRow>(MessageWidgetDataTable,Tag))
+					if(FUIWidgetRow* Row = GetRowByDataTable<FUIWidgetRow>(MessageWidgetDataTable,Tag))
 					{
 						MessageWidgetDelegate.Broadcast(*Row);
 					}

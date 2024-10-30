@@ -42,7 +42,7 @@ class AURA_API UAuraWidgetController : public UObject
 public:
 	void SetAuraWidgetController(const FWidgetControllerParams& Params);
 
-	virtual void BroadcastIntialValues();
+	virtual void BroadcastInitialValues();
 
 	virtual void BindCallbacksToDependencies();
 protected:

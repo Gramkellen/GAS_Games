@@ -10,7 +10,7 @@ class UAuraUserWidget;
 // 为了方便根据便签检索和展示信息
 // 定义了表格中每一行的结构样式
 USTRUCT(BlueprintType)
-struct FUIWigetRow : public FTableRowBase
+struct FUIWidgetRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -28,7 +28,7 @@ struct FUIWigetRow : public FTableRowBase
 	
 };
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeChangedDelegate, float, NewValue);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWigetRow,MessageWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWidgetRow,MessageWidget);
 
 /**
  * 
@@ -38,9 +38,9 @@ class AURA_API UOverlayWidgetController : public UAuraWidgetController
 {
 	GENERATED_BODY()
 public:
-	void BroadcastIntialValues() override;
+	virtual void BroadcastInitialValues() override;
 
-	void BindCallbacksToDependencies() override;
+	virtual void BindCallbacksToDependencies() override;
 
 	// 创建委托实例 ，BlueprintAssignable表示委托可以在蓝图中被赋值
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
