@@ -15,8 +15,8 @@ struct  FWidgetControllerParams
 	GENERATED_BODY()
 
 	FWidgetControllerParams(){};
-	FWidgetControllerParams(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS):
-	PlayerController(PC),PlayerState(PS),AbilitySystemComponent(ASC),AttributeSet(AS){};
+	FWidgetControllerParams(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
+						   :PlayerController(PC),PlayerState(PS),AbilitySystemComponent(ASC),AttributeSet(AS){};
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<APlayerController>PlayerController;
@@ -40,7 +40,7 @@ class AURA_API UAuraWidgetController : public UObject
 	GENERATED_BODY()
 
 public:
-	void SetAuraWidgetController(const FWidgetControllerParams& Params);
+	void SetWidgetController(const FWidgetControllerParams& Params);
 
 	virtual void BroadcastInitialValues();
 
