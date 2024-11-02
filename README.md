@@ -91,3 +91,15 @@
 1. Draw As Border的作用和含义
 2. Overlay当中Auto和Fill
 3. Wrap Box
+
+## BUG点记录
+
+### NewObject的上下文关联
+
+```c++
+AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWorld(),AttributeMenuWidgetControllerClass);
+```
+
+在我们创建对象或者需要上下文关联、存在生命周期的物体时，记得传入一个UObject* Outer
+
+:m: 主要是用于引用或者参考

@@ -3,12 +3,34 @@
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/AuraGameplayTags.h"
 #include "Net/UnrealNetwork.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
 	InitHealth(100.f);
 	InitMana(60.f);
+	/**
+	 * Add Primary Map
+	 */
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Strength,GetStrengthAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Vigor,GetVigorAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Intelligence,GetIntelligenceAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Resilience,GetResilienceAttribute());
+	
+	/**
+	* Add Primary Map
+	*/
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_Armor,GetArmorAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_ArmorPenetration,GetArmorPenetrationAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_BlockChance,GetBlockChanceAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitChance,GetCriticalHitChanceAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitDamage,GetCriticalHitDamageAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitResistance,GetCriticalHitResistanceAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_HealthRegeneration,GetHealthRegenerationAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_ManaRegeneration,GetManaRegenerationAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxHealth,GetMaxHealthAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxMana,GetMaxManaAttribute());
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

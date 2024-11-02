@@ -59,6 +59,8 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 public:
 	UAuraAttributeSet();
 
+	TMap<FGameplayTag,FGameplayAttribute> AttributeInfoMap;
+
 	// 用来定义哪些属性应当被复制，有点相当于注册，使用属性同步时需要重载
 	/*
 	 * GetLifetimeReplicatedProps函数，并在这个函数中使用DOREPLIFETIME或DOREPLIFETIME_CONDITION等宏来指定需要复制的属性

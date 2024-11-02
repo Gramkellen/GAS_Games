@@ -17,7 +17,7 @@ UOverlayWidgetController* UAuraAbilitySystemFunctionLibrary::GetOverlayWidgetCon
 		AAuraPlayerState* PlayerState = PlayerController->GetPlayerState<AAuraPlayerState>();
 		UAbilitySystemComponent* AbilitySystemComponent = PlayerState->GetAbilitySystemComponent();
 		UAttributeSet* AttributeSet = PlayerState->GetAttribute();
-		FWidgetControllerParams Params(PlayerController,PlayerState,AbilitySystemComponent,AttributeSet);
+		const FWidgetControllerParams Params(PlayerController,PlayerState,AbilitySystemComponent,AttributeSet);
 		return AuraHUD->GetOverlayWidgetController(Params);
 	}
 
@@ -32,7 +32,7 @@ UAttributeMenuWidgetController* UAuraAbilitySystemFunctionLibrary::GetAttributeM
 		AAuraPlayerState* PlayerState = PlayerController->GetPlayerState<AAuraPlayerState>();
 		UAbilitySystemComponent* AbilitySystemComponent = PlayerState->GetAbilitySystemComponent();
 		UAttributeSet* AttributeSet = PlayerState->GetAttribute();
-		FWidgetControllerParams Params(PlayerController,PlayerState,AbilitySystemComponent,AttributeSet);
+		const FWidgetControllerParams Params(PlayerController,PlayerState,AbilitySystemComponent,AttributeSet);
 		return AuraHUD->GetAttributeMenuWidgetController(Params);
 	}
 	return nullptr;

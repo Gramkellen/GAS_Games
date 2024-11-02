@@ -23,26 +23,13 @@ UAttributeMenuWidgetController* AAuraHUD::GetAttributeMenuWidgetController(const
 {
 	if(AttributeMenuWidgetController == nullptr)
 	{
-		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(AttributeMenuWidgetControllerClass);
+		// BUG点记录，忘记传GetWorld()了
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWorld(),AttributeMenuWidgetControllerClass);
 		AttributeMenuWidgetController->SetWidgetController(Params);
 		AttributeMenuWidgetController->BindCallbacksToDependencies();
 	}
 	return AttributeMenuWidgetController;
 }
-
-// void AAuraHUD::InitMenuWidget()
-// {
-// 	checkf(OverlayWidgetControllerClass,TEXT("Not Initalized OverlayWidgetController Class,Check BP_AuraHUD"));
-// 	checkf(OverlayWidgetClass,TEXT("Not Initalized OverlayWidgetClass Class,Check BP_AuraHUD"));
-// 	UAuraUserWidget* Widget = CreateWidget<UAuraUserWidget>(GetWorld(),OverlayWidgetClass);
-//
-// 	const FWidgetControllerParams Params(PC,PS,ASC,AS);
-// 	UOverlayWidgetController* WidgetController = GetOverlayWidgetController(Params);
-// 	Widget->SetWidgetController(WidgetController);
-// 	// 初始化值之后进行广播
-// 	WidgetController->BroadcastInitialValues();
-// 	Widget->AddToViewport();
-// }
 
 void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
 {

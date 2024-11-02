@@ -1,4 +1,4 @@
-// Copyright kellendeng
+  // Copyright kellendeng
 
 #pragma once
 
@@ -31,8 +31,6 @@ public:
 	UFUNCTION()
 	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent * ASC, UAttributeSet * AS);
 
-	// UFUNCTION()
-	// void InitMenuWidget();
 private:
 	UPROPERTY()
 	TObjectPtr<UAuraUserWidget>OverlayWidget;

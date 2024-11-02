@@ -75,7 +75,8 @@ public:
 
 	// 抗性 (弹性）
 	FGameplayTag Attributes_Primary_Resilience;
-	
+
+	TArray<FGameplayTag> TotalGameplayTags;
 protected:
     
    
