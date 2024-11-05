@@ -76,8 +76,20 @@ public:
 	// 抗性 (弹性）
 	FGameplayTag Attributes_Primary_Resilience;
 
+	// 所以的Gamplay Tag，便于访问和初始化
 	TArray<FGameplayTag> TotalGameplayTags;
 protected:
+
+	/*
+	 *	Input Tags
+	 */
+	FGameplayTag Input_LMB;
+	FGameplayTag Input_RMB;
+	FGameplayTag Input_1;
+	FGameplayTag Input_2;
+	FGameplayTag Input_3;
+	FGameplayTag Input_4;
+	
     
    
     

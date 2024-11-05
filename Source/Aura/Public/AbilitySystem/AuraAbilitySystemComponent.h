@@ -18,6 +18,10 @@ public:
 	void AbilityActorInfoSet();
 
 	FAssetTagsDelegate AssetTagsDelegate;
+
+	void AddGameplayAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities) ;
 protected:
 	void EffectApplied( UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle) const;
+
+	
 };

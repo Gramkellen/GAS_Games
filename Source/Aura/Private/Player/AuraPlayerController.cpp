@@ -4,6 +4,7 @@
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Input/AuraInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
@@ -29,13 +30,6 @@ void AAuraPlayerController::BeginPlay()
 		InputMode.SetHideCursorDuringCapture(false);
 		SetInputMode(InputMode);
 	}
-}
-
-void AAuraPlayerController::SetupInputComponent()
-{
-	Super::SetupInputComponent();
-	UEnhancedInputComponent *EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime)
@@ -83,13 +77,37 @@ void AAuraPlayerController::CursorTrace()
 	}
 }
 
+void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag GameplayTag)
+{
+	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,*GameplayTag.ToString());
+}
+
+void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
+{
+	GEngine->AddOnScreenDebugMessage(2,3.f,FColor::Blue,*GameplayTag.ToString());
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag GameplayTag)
+{
+	GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,*GameplayTag.ToString());
+}
+
+void AAuraPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+	UAuraInputComponent *AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	AuraInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
+
+	AuraInputComponent->BindAbilityInputActions(AuraInputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
+}
+
 // 以前就是Bind MoveForward Bind MoveRight这样
 void AAuraPlayerController::Move(const FInputActionValue& ActionValue)
 {
 	// FInputAction起始是一个对应上和右的一个结构体
 	const FVector2D InputAxisVector = ActionValue.Get<FVector2D>();
-	FRotator Rotation = GetControlRotation();
-	FRotator YawRotation{0.f,Rotation.Yaw,0.f};
+	const FRotator Rotation = GetControlRotation();
+	const FRotator YawRotation{0.f,Rotation.Yaw,0.f};
 
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);

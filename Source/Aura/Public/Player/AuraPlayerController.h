@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
+#include "Input/AuraInputConfig.h"
 #include "AuraPlayerController.generated.h"
 
 class IEnemyInterface;
@@ -22,13 +23,19 @@ public:
 	AAuraPlayerController();
 
 protected:
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
 
-    void SetupInputComponent() override;
+    virtual void SetupInputComponent() override;
 
 	virtual void PlayerTick(float DeltaTime) override;
 	
 	void CursorTrace();
+
+	void AbilityInputTagPressed(FGameplayTag GameplayTag);
+
+	void AbilityInputTagReleased(FGameplayTag GameplayTag);
+
+	void AbilityInputTagHeld(FGameplayTag GameplayTag);
 private:
 	// 映射的上下文
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -43,4 +50,7 @@ private:
 	TScriptInterface<IEnemyInterface>LastActor;
 	
 	TScriptInterface<IEnemyInterface>CurrentActor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UAuraInputConfig> AuraInputConfig;
 };

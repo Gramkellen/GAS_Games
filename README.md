@@ -103,3 +103,27 @@ AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWor
 在我们创建对象或者需要上下文关联、存在生命周期的物体时，记得传入一个UObject* Outer
 
 :m: 主要是用于引用或者参考
+
+## 开发疑惑点
+
+### 回调函数传参不同会出BUG
+
+```C++
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag GameplayTag)
+{
+	GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,*GameplayTag.ToString());
+}
+
+AuraInputComponent->BindAbilityInputActions(AuraInputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
+```
+
+但是如果参数使用 const + 引用的方式会报错
+
+```C++
+void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag& GameplayTag)
+{
+	GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,*GameplayTag.ToString());
+}
+```
+
+:m: 猜测是对回调函数类型进行一定的限制，需要再研究下源代码深入了解
