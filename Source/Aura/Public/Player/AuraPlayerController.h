@@ -8,6 +8,7 @@
 #include "Input/AuraInputConfig.h"
 #include "AuraPlayerController.generated.h"
 
+class UAuraAbilitySystemComponent;
 class IEnemyInterface;
 class UInputMappingContext;
 class UInputAction;
@@ -31,11 +32,13 @@ protected:
 	
 	void CursorTrace();
 
-	void AbilityInputTagPressed(FGameplayTag GameplayTag);
+	void AbilityInputTagPressed(FGameplayTag InputTag);
 
-	void AbilityInputTagReleased(FGameplayTag GameplayTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
 
-	void AbilityInputTagHeld(FGameplayTag GameplayTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	UAuraAbilitySystemComponent* GetAuraAbilitySystemComponent();
 private:
 	// 映射的上下文
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -53,4 +56,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UAuraInputConfig> AuraInputConfig;
+
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
 };

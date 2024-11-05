@@ -55,6 +55,7 @@ protected:
 
 	void AddCharacterAbilities() const;
 private:
+	// 初始的能力数组
 	UPROPERTY(EditAnywhere,Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>>StartupAbilities;
 };
