@@ -2,19 +2,24 @@
 
 
 #include "Player/AuraPlayerController.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "GameplayAbilitySpec.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraGameplayTags.h"
+#include "Components/SplineComponent.h"
 #include "Input/AuraInputComponent.h"
+#include "GameFramework/Pawn.h"
 #include "Interaction/EnemyInterface.h"
 
-AAuraPlayerController::AAuraPlayerController()
+AAuraPlayerController::AAuraPlayerController():ShortPressThreshold(0.5f),AutoRunAcceptanceRadius(50.f),FollowTime(0.f),
+                                               bTargeting(false),bAutoMove(false),CachedLocation(FVector::ZeroVector)
 {
 	bReplicates = true;
 	bEnableClickEvents = true;
+	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -83,21 +88,67 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	// GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,*InputTag.ToString());
+	if(InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB))
+	{
+		bTargeting = CurrentActor ? true : false;
+		bAutoMove = false;
+	}
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	// GEngine->AddOnScreenDebugMessage(2,3.f,FColor::Blue,*InputTag.ToString());
-	if(GetAuraAbilitySystemComponent() == nullptr) return;
-	GetAuraAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
+	if(InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB) && !bTargeting)
+	{
+		APawn* ControlPawn = GetPawn();
+		// 如果点一下就释放 -> 自动导航？
+		if(FollowTime <= ShortPressThreshold && ControlPawn)
+		{
+			if(UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this,ControlPawn->GetActorLocation(),CachedLocation))
+			{
+				for(const FVector& Point : NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(Point,ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(),Point,8.f,8,FColor::Magenta);
+				}
+				bAutoMove = true;
+			}
+			
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
+	}
+	else
+	{
+		if(GetAuraAbilitySystemComponent() == nullptr) return;
+		GetAuraAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
+	}
+	
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	// GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,*InputTag.ToString());
-	if(GetAuraAbilitySystemComponent() == nullptr) return;
-	GetAuraAbilitySystemComponent()->AbilityInputTagHeld(InputTag);
+	// 此时就是移动了
+	if(InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB) && !bTargeting)
+	{
+		FollowTime += GetWorld()->GetDeltaSeconds();
+		FHitResult CursorHit;
+		if(GetHitResultUnderCursor(ECC_Visibility,false,CursorHit))
+		{
+			CachedLocation = CursorHit.ImpactPoint;
+		}
+		
+		if(APawn* ControlPawn = GetPawn())
+		{
+			const FVector WorldDirection = (CachedLocation - ControlPawn->GetActorLocation()).GetSafeNormal();
+			ControlPawn->AddMovementInput(WorldDirection);
+		}
+	}
+	else
+	{
+		if(GetAuraAbilitySystemComponent() == nullptr) return;
+		GetAuraAbilitySystemComponent()->AbilityInputTagHeld(InputTag);
+	}
+	
 }
 
 UAuraAbilitySystemComponent* AAuraPlayerController::GetAuraAbilitySystemComponent()

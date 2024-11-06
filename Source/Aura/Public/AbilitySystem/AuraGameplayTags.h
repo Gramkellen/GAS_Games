@@ -78,8 +78,7 @@ public:
 
 	// 所以的Gamplay Tag，便于访问和初始化
 	TArray<FGameplayTag> TotalGameplayTags;
-protected:
-
+	
 	/*
 	 *	Input Tags
 	 */

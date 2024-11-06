@@ -8,6 +8,7 @@
 #include "Input/AuraInputConfig.h"
 #include "AuraPlayerController.generated.h"
 
+class USplineComponent;
 class UAuraAbilitySystemComponent;
 class IEnemyInterface;
 class UInputMappingContext;
@@ -59,4 +60,24 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	/* *
+	 *  Top Down Move
+	 */
+	UPROPERTY(EditDefaultsOnly)
+	float ShortPressThreshold;  // 持续按的阈值
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius;
+	
+	float FollowTime;    // 持续时间
+
+	bool bTargeting;    // 是否点击目标（鼠标左键点击）
+
+	bool bAutoMove;    // 自动移动
+
+	FVector CachedLocation; // 鼠标点击的位置
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent>Spline;  // 曲线去拟合路径
 };

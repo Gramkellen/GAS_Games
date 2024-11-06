@@ -41,22 +41,10 @@ void UAuraAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Inp
 	
 }
 
-void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
-{
-	if(!InputTag.IsValid()) return ;
-	for(FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
-	{
-		if(AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
-		{
-			AbilitySpecInputReleased(AbilitySpec);
-		}
-	}
-}
-
 void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if(!InputTag.IsValid()) return;
-
+	
 	// 返回已激活地所有能力的 实例
 	for(FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
@@ -70,3 +58,17 @@ void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputT
 		}
 	}
 }
+
+void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
+{
+	if(!InputTag.IsValid()) return ;
+	for(FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if(AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputReleased(AbilitySpec);
+		}
+	}
+}
+
+

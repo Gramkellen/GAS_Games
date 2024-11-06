@@ -104,6 +104,10 @@ AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWor
 
 :m: 主要是用于引用或者参考
 
+### 待修复Bug
+
+Enemy只有一种类型可以被标记，另外一个弹弓的Enemy无法被标记
+
 ## 开发疑惑点
 
 ### 回调函数传参不同会出BUG
