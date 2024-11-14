@@ -40,6 +40,8 @@ protected:
 	void AbilityInputTagHeld(FGameplayTag InputTag);
 
 	UAuraAbilitySystemComponent* GetAuraAbilitySystemComponent();
+
+	void AutoMove();
 private:
 	// 映射的上下文
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -51,10 +53,12 @@ private:
 	void Move(const FInputActionValue& ActionValue);
 
 	// 使用TScriptInterface，具有引用计数和垃圾回收
-	TScriptInterface<IEnemyInterface>LastActor;
+	// TScriptInterface<IEnemyInterface> LastActor;
+	IEnemyInterface* LastActor;
 	
-	TScriptInterface<IEnemyInterface>CurrentActor;
-
+	// TScriptInterface<IEnemyInterface> CurrentActor;
+	IEnemyInterface* CurrentActor;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UAuraInputConfig> AuraInputConfig;
 

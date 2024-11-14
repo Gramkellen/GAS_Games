@@ -15,7 +15,7 @@
 #include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController():ShortPressThreshold(0.5f),AutoRunAcceptanceRadius(50.f),FollowTime(0.f),
-                                               bTargeting(false),bAutoMove(false),CachedLocation(FVector::ZeroVector)
+                                               bTargeting(false),bAutoMove(  ),CachedLocation(FVector::ZeroVector),LastActor(nullptr),CurrentActor(nullptr)
 {
 	bReplicates = true;
 	bEnableClickEvents = true;
@@ -45,6 +45,27 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 	CursorTrace();
+	AutoMove();
+}
+
+void AAuraPlayerController::AutoMove()
+{
+	if(!bAutoMove) return;
+	if(APawn* ControlledPawn = GetPawn())
+	{
+		// 找到样条上距离玩家最近的点
+		const FVector LocationOnSpline = Spline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(),ESplineCoordinateSpace::World);
+		// 找到这个点的切向方向
+		const FVector Direction = Spline->FindDirectionClosestToWorldLocation(LocationOnSpline,ESplineCoordinateSpace::World);
+
+		ControlledPawn->AddMovementInput(Direction);
+
+		const float Radius = (LocationOnSpline - CachedLocation).Length();
+		if(Radius <= AutoRunAcceptanceRadius)
+		{
+			bAutoMove = false;
+		}
+	}
 }
 
 void AAuraPlayerController::CursorTrace()
@@ -53,36 +74,12 @@ void AAuraPlayerController::CursorTrace()
 	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,CursorHit);
 	if(!CursorHit.bBlockingHit) return ; // No Collision
 	LastActor = CurrentActor;
-	CurrentActor = CursorHit.GetActor();
-	/* Diffrent Case About Hit Result
-	 * A. both nullptr
-	 * B. last nullptr but current not nullptr
-	 * C. last not nullptr but current is nullptr
-	 * D. last not nullptr and current not nullptr
-	 *	- last == current
-	 *	- last != current
-	 */
-	if(LastActor == nullptr)
+	CurrentActor = Cast<IEnemyInterface>(CursorHit.GetActor());
+	// 如果相等，都是 Highlighted / UnHighlighted，可以不需要进行操作
+	if(LastActor!=CurrentActor)
 	{
-		if(CurrentActor!=nullptr)
-		{
-			CurrentActor->OnHighlightActor();
-		}
-	}
-	else
-	{
-		if(CurrentActor!=nullptr)
-		{
-			if(CurrentActor!=LastActor)
-			{
-				LastActor->UnHighlightActor();
-				CurrentActor->OnHighlightActor();
-			}
-		}
-		else
-		{
-			LastActor->UnHighlightActor();
-		}
+		if(LastActor) LastActor->UnHighlightActor();
+		if(CurrentActor)CurrentActor->OnHighlightActor();
 	}
 }
 
@@ -105,17 +102,20 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		{
 			if(UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this,ControlPawn->GetActorLocation(),CachedLocation))
 			{
+				// 一定要记得清空，上一次生成的样条线可能残留，影响最终效果
+				Spline->ClearSplinePoints();
 				for(const FVector& Point : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(Point,ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(),Point,8.f,8,FColor::Magenta);
 				}
-				bAutoMove = true;
+				if(!NavPath->PathPoints.IsEmpty()) // 导航路径可能存在没有生成合适的路线
+				{
+					CachedLocation = NavPath->PathPoints[NavPath->PathPoints.Num() -1 ]; // 避免点击点无法到达的时候，生成的路线和目标点有距离，形成死循环
+					bAutoMove = true;
+				}
 			}
-			
 		}
 		FollowTime = 0.f;
-		bTargeting = false;
 	}
 	else
 	{
