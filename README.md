@@ -106,7 +106,9 @@ AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWor
 
 ### 待修复Bug
 
-Enemy只有一种类型可以被标记，另外一个弹弓的Enemy无法被标记
+Enemy只有一种类型可以被标记，另外一个弹弓的Enemy无法被标记 √
+
+- Collision需要设置Visibility的碰撞
 
 ## 开发疑惑点
 
