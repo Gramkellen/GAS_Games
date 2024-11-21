@@ -6,16 +6,10 @@
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
 
-void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-                                           const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-                                           const FGameplayEventData* TriggerEventData)
+void UAuraProjectileSpell::SpawnProjectile()
 {
-	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
-	// 确保服务器才能生成
-	if(!HasAuthority(&ActivationInfo)) return;
-	
-	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(ActorInfo->AvatarActor))
+	if(!GetAvatarActorFromActorInfo()->HasAuthority()) return;
+	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
 	{
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(CombatInterface->GetWeaponSocketLocation());
@@ -28,4 +22,11 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}
+}
+
+void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
+                                           const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+                                           const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
