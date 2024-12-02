@@ -68,9 +68,13 @@ void AAuraPlayerController::AutoMove()
 	}
 }
 
+FHitResult AAuraPlayerController::GetCursorHit() const
+{
+	return CursorHit;
+}
+
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
 	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,CursorHit);
 	if(!CursorHit.bBlockingHit) return ; // No Collision
 	LastActor = CurrentActor;
@@ -131,8 +135,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	if(InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB) && !bTargeting)
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
-		FHitResult CursorHit;
-		if(GetHitResultUnderCursor(ECC_Visibility,false,CursorHit))
+		if(CursorHit.bBlockingHit)
 		{
 			CachedLocation = CursorHit.ImpactPoint;
 		}

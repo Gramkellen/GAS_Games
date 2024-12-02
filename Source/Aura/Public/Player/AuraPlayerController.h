@@ -23,7 +23,9 @@ class AURA_API AAuraPlayerController : public APlayerController
 
 public:
 	AAuraPlayerController();
-
+	
+	FHitResult GetCursorHit() const;
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -84,4 +86,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent>Spline;  // 曲线去拟合路径
+
+	FHitResult CursorHit; // 同意保存CursorHit的事件
 };

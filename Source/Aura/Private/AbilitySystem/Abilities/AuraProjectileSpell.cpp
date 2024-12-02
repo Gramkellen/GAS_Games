@@ -6,13 +6,17 @@
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
 
-void UAuraProjectileSpell::SpawnProjectile()
+void UAuraProjectileSpell::SpawnProjectile(const FVector& TargetLocation)
 {
 	if(!GetAvatarActorFromActorInfo()->HasAuthority()) return;
 	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
 	{
 		FTransform SpawnTransform;
-		SpawnTransform.SetLocation(CombatInterface->GetWeaponSocketLocation());
+		const FVector StartLocation(CombatInterface->GetWeaponSocketLocation());
+		SpawnTransform.SetLocation(StartLocation);
+		// 这里就是怎么获取Direction的数据然后设置旋转
+		FVector Direction((TargetLocation - StartLocation).GetSafeNormal());
+		SpawnTransform.SetRotation(Direction.Rotation().Quaternion());
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
 			ProjectileClass,
 			SpawnTransform,
