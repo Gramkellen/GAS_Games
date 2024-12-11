@@ -2,9 +2,11 @@
 
 
 #include "Actor/AuraProjectile.h"
-
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 AAuraProjectile::AAuraProjectile()
@@ -28,13 +30,38 @@ AAuraProjectile::AAuraProjectile()
 void AAuraProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	SetLifeSpan(LifeSpan);
 	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AAuraProjectile::OnSphereOverlap);
+	// UGameplayStatics::PlaySoundAtLocation(this,LoopingSound,GetActorLocation(),FRotator::ZeroRotator);
+	LoopingAudioComponent = UGameplayStatics::SpawnSoundAttached(LoopingSound, GetRootComponent());
 }
 
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(),FRotator::ZeroRotator);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect,GetActorLocation());
+	LoopingAudioComponent->Stop();
+	if(HasAuthority())
+	{
+		Destroy();
+	}
+	else
+	{
+		bHit = true;
+	}
+}
+
+void AAuraProjectile::Destroyed()
+{
+	// 客户端只会同步 Destroy 事件，因此需要进行判断然后播放
+	if(!bHit && !HasAuthority())
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(),FRotator::ZeroRotator);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect,GetActorLocation());
+		LoopingAudioComponent->Stop();
+	}
+	Super::Destroyed();
 }
 
 

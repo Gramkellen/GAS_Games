@@ -8,6 +8,7 @@
 
 void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
+	// 确保只有服务器能够生成
 	if(!GetAvatarActorFromActorInfo()->HasAuthority()) return;
 	
 	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
