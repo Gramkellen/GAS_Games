@@ -27,6 +27,7 @@ public:
 	FHitResult GetCursorHit() const;
 	
 protected:
+	
 	virtual void BeginPlay() override;
 
     virtual void SetupInputComponent() override;
@@ -41,6 +42,12 @@ protected:
 
 	void AbilityInputTagHeld(FGameplayTag InputTag);
 
+	bool bShiftDown;
+	
+	void ShiftKeyPressed();
+
+	void ShiftKeyReleased();
+	
 	UAuraAbilitySystemComponent* GetAuraAbilitySystemComponent();
 
 	void AutoMove();
@@ -52,6 +59,9 @@ private:
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction>MoveAction;
 
+	UPROPERTY(EditAnywhere,Category="Input")
+	TObjectPtr<UInputAction>ShiftAction;
+	
 	void Move(const FInputActionValue& ActionValue);
 
 	// 使用TScriptInterface，具有引用计数和垃圾回收

@@ -14,8 +14,16 @@
 #include "GameFramework/Pawn.h"
 #include "Interaction/EnemyInterface.h"
 
-AAuraPlayerController::AAuraPlayerController():ShortPressThreshold(0.5f),AutoRunAcceptanceRadius(50.f),FollowTime(0.f),
-                                               bTargeting(false),bAutoMove(  ),CachedLocation(FVector::ZeroVector),LastActor(nullptr),CurrentActor(nullptr)
+AAuraPlayerController::AAuraPlayerController():
+		bShiftDown(false),
+		LastActor(nullptr),
+		CurrentActor(nullptr),
+		ShortPressThreshold(0.5f),
+		AutoRunAcceptanceRadius(50.f),
+		FollowTime(0.f),
+		bTargeting(false),
+		bAutoMove(false),
+		CachedLocation(FVector::ZeroVector)
 {
 	bReplicates = true;
 	bEnableClickEvents = true;
@@ -98,7 +106,7 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	if(InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB) && !bTargeting)
+	if(!bTargeting && !bShiftDown && InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB) )
 	{
 		APawn* ControlPawn = GetPawn();
 		// 如果点一下就释放 -> 自动导航？
@@ -132,7 +140,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
 	// 此时就是移动了
-	if(InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB) && !bTargeting)
+	if(!bTargeting && !bShiftDown && InputTag.MatchesTagExact(FAuraGameplayTags::Get().Input_LMB))
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
 		if(CursorHit.bBlockingHit)
@@ -154,6 +162,16 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	
 }
 
+void AAuraPlayerController::ShiftKeyPressed()
+{
+	bShiftDown = true;
+}
+
+void AAuraPlayerController::ShiftKeyReleased()
+{
+	bShiftDown = false;
+}
+
 UAuraAbilitySystemComponent* AAuraPlayerController::GetAuraAbilitySystemComponent()
 {
 	if(AuraAbilitySystemComponent == nullptr)
@@ -168,7 +186,8 @@ void AAuraPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	UAuraInputComponent *AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	AuraInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
-
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started,this, &AAuraPlayerController::ShiftKeyPressed);
+	AuraInputComponent->BindAction(ShiftAction,ETriggerEvent::Completed,this, &AAuraPlayerController::ShiftKeyReleased);
 	AuraInputComponent->BindAbilityInputActions(AuraInputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
 }
 

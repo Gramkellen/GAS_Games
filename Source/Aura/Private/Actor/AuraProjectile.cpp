@@ -10,6 +10,8 @@
 AAuraProjectile::AAuraProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true; // 启用网络复制，只有服务器能够生成，然后同步到客户端上面
+	
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	Sphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic,ECR_Overlap);

@@ -23,4 +23,5 @@ public:
 	virtual void InitAbilityActorInfo() override;
 
 	virtual int32 GetPlayerLevel() override;
+	
 };
