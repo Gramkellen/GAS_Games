@@ -7,7 +7,7 @@
 #include "TargetDataUnderMouse.generated.h"
 
 // const 是为了保证传播值能够复制，使用CAST时不要直接用引用
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMouseTargetDataSignature,const FVector&,Data); 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMouseTargetDataSignature,const FGameplayAbilityTargetDataHandle&,DataHandle); 
 /**
  * 
  */
@@ -20,7 +20,7 @@ public:
 	/* HidePin = "ParameterName",隐藏指定参数的输入引脚
 	 * DefaultToSelf = "ParameterName", 指定参数的值设置为 Self
 	*/
-	UFUNCTION(BlueprintCallable,Category="Ability|Tasks",meta = (DisplayName="TargetDataUnderMouse" , HidePin = "OwningAbility", DefaultToSelf = "OwningAbility",BlueprintInternalUseOnly="true"))
+	UFUNCTION(BlueprintCallable,Category="Ability|Tasks",meta=(DisplayName="TargetDataUnderMouse" , HidePin = "OwningAbility", DefaultToSelf = "OwningAbility",BlueprintInternalUseOnly = "true"))
 	static UTargetDataUnderMouse* CreateTargetDataUnderMouse(UGameplayAbility* OwningAbility);
 
 	/*
@@ -31,4 +31,8 @@ public:
 
 private:
 	virtual void Activate() override;
+
+	void SendMouseCursorData();
+
+	void OnTargetDataReplicatedCallback(const FGameplayAbilityTargetDataHandle& DataHandle, FGameplayTag ActivationTag);
 };

@@ -108,7 +108,7 @@ AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWor
 
 Enemy只有一种类型可以被标记，另外一个弹弓的Enemy无法被标记 √
 
-- Collision需要设置Visibility的碰撞
+- Collision需要设置Visibility的碰撞 
 
 ## 开发疑惑点
 
@@ -133,3 +133,40 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag& GameplayTag)
 ```
 
 :m: 猜测是对回调函数类型进行一定的限制，需要再研究下源代码深入了解
+
+### 网络同步问题
+
+在网络同步时需要注意网络传递和同步的问题，不能客户端已经完成了，数据还没有到达服务端进行同步
+
+#### 能力预测同步的流程
+
+```C++
+void ServerSetReplicatedTargetData(FGameplayAbilitySpecHandle AbilityHandle, FPredictionKey AbilityOriginalPredictionKey, const FGameplayAbilityTargetDataHandle& ReplicatedTargetDataHandle, FGameplayTag ApplicationTag, FPredictionKey CurrentPredictionKey);
+```
+
+- AbilityOriginalPredictionKey是能力激活时就会获得的标志键
+- 那么每次通过RPC进行网络同步时，会更新CurrentPredictionkey，这样可以记录正在进行同步的能力和数据
+- 同时如果客户端的预测被服务器拒绝了，可以根据CUrrentPredictionKey找到对应的bility进行回滚
+
+##### 客户端激活能力
+
+- 当玩家在客户端激活某个能力时，客户端会生成一个 `AbilityOriginalPredictionKey`，这是能力生命周期中的初始预测键。
+- 客户端开始进行预测，假设能力会立即生效，并可能开始显示一些效果（如动画、特效等）。
+
+##### 客户端发送请求到服务器
+
+- 客户端向服务器发送能力的请求时，除了发送能力的目标数据（`TargetData`）外，还会附带 `AbilityOriginalPredictionKey`。这个键标识了这次能力请求的 **源始**，即它属于哪个能力激活过程。
+
+##### 服务器接收并验证请求
+
+- 服务器会接收到客户端发送的请求，并验证该请求的合法性。服务器还会使用 `AbilityOriginalPredictionKey` 来确认这次请求是否有效，并且是否是客户端首次发起的能力请求。
+- 如果服务器允许该能力的执行，它会处理该能力的目标数据，生成新的 `CurrentPredictionKey`，并将该信息返回给客户端。
+
+##### 客户端更新并同步
+
+- 客户端收到服务器的响应后，可能会更新能力的状态，并根据服务器的反馈调整其预测结果。
+- 在这个过程中，**`CurrentPredictionKey`** 可能会更新。每当能力的状态变化时（例如，提交新的目标数据、调整效果等），`CurrentPredictionKey` 会跟随这些变化而改变，确保每个阶段的执行都是唯一且正确的。
+
+##### 回滚或修正
+
+如果客户端的预测结果与服务器的最终决策不一致，客户端需要根据 `CurrentPredictionKey` 来执行回滚操作，将能力的状态恢复到服务器确认的正确状态。
