@@ -14,6 +14,7 @@ AAuraEffectActor::AAuraEffectActor():LevelActor(1.f)
 {
 	PrimaryActorTick.bCanEverTick = false;
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root Component"));
+	
 }
 
 void AAuraEffectActor::BeginPlay()

@@ -2,11 +2,15 @@
 
 
 #include "Actor/AuraProjectile.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Aura/Aura.h"
 
 // Sets default values
 AAuraProjectile::AAuraProjectile()
@@ -15,6 +19,7 @@ AAuraProjectile::AAuraProjectile()
 	bReplicates = true; // 启用网络复制，只有服务器能够生成，然后同步到客户端上面
 	
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
+	Sphere->SetCollisionObjectType(ECC_Projectile);
 	Sphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic,ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldStatic,ECR_Overlap);
@@ -44,6 +49,11 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 	LoopingAudioComponent->Stop();
 	if(HasAuthority())
 	{
+		// Apply Effect
+		if(UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
+		{
+			ASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
+		}
 		Destroy();
 	}
 	else

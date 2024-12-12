@@ -2,7 +2,9 @@
 
 
 #include "AbilitySystem/Abilities/AuraProjectileSpell.h"
-
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "Projects.h"
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
 
@@ -27,6 +29,18 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 			Cast<APawn>(GetOwningActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
+		// Apply DamageEffect and DeBuff
+		const float Level = GetAbilityLevel();
+		UAbilitySystemComponent* SourceASC =  UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		const FGameplayEffectContextHandle ContextHandle =  SourceASC->MakeEffectContext();
+		const FGameplayEffectSpecHandle DamageSpecHandle =  SourceASC->MakeOutgoingSpec(DamageEffectClass,Level,ContextHandle);
+		const FGameplayEffectSpecHandle DeBuffSpecHandle = SourceASC->MakeOutgoingSpec(DeBuffEffectClass,Level,ContextHandle);
+		Projectile->DamageEffectSpecHandle = DamageSpecHandle;
+		if(DeBuffSpecHandle.IsValid() && DeBuffSpecHandle.Data.IsValid())
+		{
+			SourceASC->ApplyGameplayEffectSpecToSelf(*DeBuffSpecHandle.Data.Get());  // 释放Ability就减少Mana
+		}
+		
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 }

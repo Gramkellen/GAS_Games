@@ -54,13 +54,13 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Effects")
 	TSubclassOf<UGameplayEffect>InstantGameplayEffectClass;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Effect")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Effects")
 	EEffectApplicationPolicy InstantApplicationPolicy = EEffectApplicationPolicy::EAP_DoNotApply;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Effects")
 	TSubclassOf<UGameplayEffect>DurationGameplayEffectClass;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Effect")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Effects")
 	EEffectApplicationPolicy DurationApplicationPolicy = EEffectApplicationPolicy::EAP_DoNotApply;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Effects")

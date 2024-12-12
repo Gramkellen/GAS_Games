@@ -52,4 +52,5 @@ void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
+	InitializeDefaultAttribute(); // 给敌人也初始化一样的属性，后续修改
 }

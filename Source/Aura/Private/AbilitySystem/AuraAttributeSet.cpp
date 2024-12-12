@@ -129,10 +129,12 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if(Data.EvaluatedData.Attribute== GetHealthAttribute())
 	{
 		// GEngine->AddOnScreenDebugMessage(1,2.0f,FColor::Red,FString::Printf(TEXT("NewValue : %f"),GetHealth()));
+		UE_LOG(LogTemp,Warning,TEXT("The Health of %s is %f"),*Props.SourceAvaterActor->GetName(),GetHealth());
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
 	}
 	if(Data.EvaluatedData.Attribute== GetManaAttribute())
 	{
+		UE_LOG(LogTemp,Warning,TEXT("The Mana of %s is %f"),*Props.SourceAvaterActor->GetName(),GetMana());
 		SetMana(FMath::Clamp(GetMana(),0.f,GetMaxMana()));
 	}
 }
