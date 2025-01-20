@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
-#include "UObject/NoExportTypes.h"
 #include "AuraWidgetController.generated.h"
 
 
@@ -52,8 +51,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly,Category = "WidgetController")
 	TObjectPtr<APlayerState>PlayerState;
-
-	// 这里为什么不用Aura的？
+	
 	UPROPERTY(BlueprintReadOnly,Category = "WidgetController")
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 

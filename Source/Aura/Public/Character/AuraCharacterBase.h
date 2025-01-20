@@ -43,7 +43,7 @@ protected:
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
 	UPROPERTY(BlueprintReadWrite,Category="AbilitySystem")
-	TObjectPtr<UAttributeSet>Attribute;
+	TObjectPtr<UAttributeSet>AttributeSet;
 
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category = "Primary Attribute")
 	TSubclassOf<UGameplayEffect>DefaultPrimaryAttributesClass;

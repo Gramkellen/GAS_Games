@@ -12,7 +12,7 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this,&UAuraAbilitySystemComponent::ClientEffectApplied);
 }
 
-// 当有GE应用到所在的AbilitySystemCOmponent时，回调EffectApplied,然后广播这个GE对应的标签
+// 当有GE应用到所在的AbilitySystemComponent时，回调EffectApplied,然后广播这个GE对应的标签
 void UAuraAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
 	const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
 {

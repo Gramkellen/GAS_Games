@@ -1,9 +1,9 @@
 // Copyright kellendeng
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "UI/WidgetController/AuraWidgetController.h"
+#include "Aura/Aura.h"
 #include "OverlayWidgetController.generated.h"
 
 class UAuraUserWidget;
@@ -27,9 +27,9 @@ struct FUIWidgetRow : public FTableRowBase
 	UTexture2D* Image = nullptr;
 	
 };
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeChangedDelegate, float, NewValue);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWidgetRow,MessageWidget);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWidgetRow,MessageWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeChangedDelegate, float, NewValue);
 /**
  * 
  */

@@ -28,7 +28,7 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 
 UAttributeSet* AAuraCharacterBase::GetAttribute() const
 {
-	return Attribute;
+	return AttributeSet;
 }
 
 void AAuraCharacterBase::InitAbilityActorInfo()
