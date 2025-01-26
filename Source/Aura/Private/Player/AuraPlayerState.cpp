@@ -13,7 +13,7 @@ AAuraPlayerState::AAuraPlayerState()
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
-	Attribute = CreateDefaultSubobject<UAuraAttributeSet>("Attribute");
+	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("Attribute");
 }
 
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
@@ -29,7 +29,7 @@ void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 UAttributeSet* AAuraPlayerState::GetAttribute() const
 {
-	return Attribute;
+	return AttributeSet;
 }
 
 void AAuraPlayerState::OnRep_PlayerLevel(int32 OldPlayerLevel)

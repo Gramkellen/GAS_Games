@@ -106,9 +106,9 @@ AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWor
 
 ### 待修复Bug
 
-Enemy只有一种类型可以被标记，另外一个弹弓的Enemy无法被标记 √
+Enemy只有一种类型可以被标记，另外一个弹弓的Enemy无法被标记  ✅ 
 
-- Collision需要设置Visibility的碰撞 
+- Collision设置Visibility的碰撞 
 
 ## 开发疑惑点
 
@@ -170,3 +170,18 @@ void ServerSetReplicatedTargetData(FGameplayAbilitySpecHandle AbilityHandle, FPr
 ##### 回滚或修正
 
 如果客户端的预测结果与服务器的最终决策不一致，客户端需要根据 `CurrentPredictionKey` 来执行回滚操作，将能力的状态恢复到服务器确认的正确状态。
+
+### SourceObject问题
+
+对于GAS应用GameplayEffect，需要设置SourceObject，否则对于一些Attributes的更新，可能会出现数值的问题
+
+因为我并不知道这个GameplayEffect的来源是什么，怎么进行更新
+
+```C++
+// PrimaryAttributes初始化
+FGameplayEffectContextHandle PrimaryAttributeContextHandle =  ASC->MakeEffectContext();
+PrimaryAttributeContextHandle.AddSourceObject(AvatarActor);  // 不添加SourceActor会导致缺少Effect来源
+const FGameplayEffectSpecHandle PrimaryAttributeSpecHandle = ASC->MakeOutgoingSpec(ClassDefaultInfo.PrimaryAttributes, Level, PrimaryAttributeContextHandle);
+ASC->ApplyGameplayEffectSpecToSelf(*PrimaryAttributeSpecHandle.Data.Get());
+```
+

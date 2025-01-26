@@ -24,7 +24,7 @@ public:
 	// 网络同步需要调用
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UAttributeSet* GetAttribute()const ;
+	UAttributeSet* GetAttribute() const;
 
 	FORCEINLINE int32 GetPlayerLevel() const {return PlayerLevel;};
 protected:
@@ -32,7 +32,7 @@ protected:
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
 	UPROPERTY(BlueprintReadWrite,Category="AbilitySystem")
-	TObjectPtr<UAttributeSet>Attribute;
+	TObjectPtr<UAttributeSet>AttributeSet;
 
 private:
 	UPROPERTY(VisibleAnywhere,ReplicatedUsing = OnRep_PlayerLevel)

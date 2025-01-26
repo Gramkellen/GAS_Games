@@ -37,7 +37,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// 默认是 Changed才通知，ALways是希望更新值，但是值和原来一样的时候也能做些事情
+	// 默认是 Changed才通知，Always是希望更新值，但是值和原来一样的时候也能做些事情
 	// 这里是将网络同步的属性进行注册
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Health,COND_None, REPNOTIFY_Always);
 

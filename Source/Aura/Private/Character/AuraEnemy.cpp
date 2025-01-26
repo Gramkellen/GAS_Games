@@ -4,6 +4,7 @@
 #include "Aura/Public/Character/AuraEnemy.h"
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemFunctionLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Aura/Aura.h"
 #include "Components/WidgetComponent.h"
@@ -52,7 +53,7 @@ void AAuraEnemy::InitAbilityActorInfo()
 
 int32 AAuraEnemy::GetPlayerLevel()
 {
-	return PlayerLevel;
+	return Level;
 }
 
 void AAuraEnemy::AttributeChangedDelegateBind()
@@ -90,6 +91,11 @@ void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
-	InitializeDefaultAttribute(); // 给敌人也初始化一样的属性，后续修改
+	InitializeAttributeDefaults(); 
 	AttributeChangedDelegateBind();
+}
+
+void AAuraEnemy::InitializeAttributeDefaults() const
+{
+	UAuraAbilitySystemFunctionLibrary::InitializeAttributeDefaults(this, CharacterClass, Level, AbilitySystemComponent);
 }

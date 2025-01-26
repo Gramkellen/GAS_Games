@@ -36,7 +36,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 void AAuraCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
-	// Intialize Actor Info For Client
+	// Initialize Actor Info For Client
 	InitAbilityActorInfo();
 }
 
@@ -57,7 +57,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
 		}
 	}
-	InitializeDefaultAttribute();
+	InitializeAttributeDefaults();
 }
 
 int32 AAuraCharacter::GetPlayerLevel()
