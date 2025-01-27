@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/AuraGameplayTags.h"
 #include "GameplayTagsManager.h"
+#include "Kismet/GameplayStatics.h"
 
 FAuraGameplayTags FAuraGameplayTags::AuraGameplayTags;
 
@@ -72,5 +73,8 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	AuraGameplayTags.Input_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.4"),FString("Ability Input key 4"));
 	AuraGameplayTags.Input_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.LMB"),FString("Ability Input Left Mouse Button"));
 	AuraGameplayTags.Input_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.RMB"),FString("Ability Input Right Mouse Button"));
+
+	// Damage Tag Add
+	AuraGameplayTags.DamageTag = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("DamageTag"), FString("Damage Tag"));
 }
 

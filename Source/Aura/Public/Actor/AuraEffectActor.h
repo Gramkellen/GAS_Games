@@ -13,7 +13,7 @@ class UGameplayEffect;
 
 // 标记什么时候枚举发挥作用
 UENUM(BlueprintType)
-enum class EEffectApplicationPolicy
+enum class EEffectApplicationPolicy : uint8
 {
 	EAP_ApplyOnOverlap,
 	EAP_ApplyOnEndOverlap,
@@ -22,7 +22,7 @@ enum class EEffectApplicationPolicy
 
 // 移除 GE 的政策
 UENUM(BlueprintType)
-enum class EEffectRemovalPolicy
+enum class EEffectRemovalPolicy : uint8
 {
 	ERP_RemoveOnEndOverlap,
 	ERP_DoNotRemove

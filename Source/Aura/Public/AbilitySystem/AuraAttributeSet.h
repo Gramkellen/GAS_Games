@@ -75,72 +75,76 @@ public:
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	
 	// Primary Properties
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Strength, Category = "Attribute|PrimaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Strength, Category = "Attributes|Primary Attribute")
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Strength);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Intelligence, Category = "Attribute|PrimaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Intelligence, Category = "Attributes|Primary Attribute")
 	FGameplayAttributeData Intelligence;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Intelligence);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Resilience, Category = "Attribute|PrimaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Resilience, Category = "Attributes|Primary Attribute")
 	FGameplayAttributeData Resilience;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Resilience);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Vigor, Category = "Attribute|PrimaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Vigor, Category = "Attributes|Primary Attribute")
 	FGameplayAttributeData Vigor;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Vigor);
 
 	// Second Properties
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Armor,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Armor,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData Armor;          // Reduce Damage and Improve Block Chance
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Armor);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_ArmorPenetration,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_ArmorPenetration,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData ArmorPenetration;  // 物理穿透
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,ArmorPenetration);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_BlockChance,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_BlockChance,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData BlockChance;  // 格挡率+
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,BlockChance);
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_CriticalHitChance,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_CriticalHitChance,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData CriticalHitChance;  // 暴击率
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,CriticalHitChance);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_CriticalHitDamage,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_CriticalHitDamage,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData CriticalHitDamage;  // 暴力伤害
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,CriticalHitDamage);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_CriticalHitResistance,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_CriticalHitResistance,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData CriticalHitResistance;  // 暴力抵挡
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,CriticalHitResistance);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_HealthRegeneration,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_HealthRegeneration,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData HealthRegeneration;  // 生命值恢复
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,HealthRegeneration);
 
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_ManaRegeneration,Category = "Attribue|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_ManaRegeneration,Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData ManaRegeneration;  // 法力值恢复
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,ManaRegeneration);
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxHealth, Category = "Attribute|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxHealth, Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData MaxHealth;  // 最大生命值
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHealth);
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxMana, Category = "Attribute|SecondaryProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxMana, Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData MaxMana;  // 最大法力值
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxMana);
 	
 	// Vital Properties
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Health, Category = "Attribute|VitalProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Health, Category = "Attributes|Vital Attribute")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Health);
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Mana, Category = "Attribute|VitalProperties")
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Mana, Category = "Attributes|Vital Attribute")
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Mana);
-	
+
+	// Meta Attributes
+	UPROPERTY(EditDefaultsOnly, Category="Attributes|Meta Attribute")
+	FGameplayAttributeData InComingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, InComingDamage);
 	
 	// 回调函数需要反射系统能够查找到
 	UFUNCTION()
