@@ -91,8 +91,11 @@ public:
 
 	// DamageTag
 	FGameplayTag DamageTag;
-    
-   
+
+	/*
+	 * Effect Tags
+	 */
+	FGameplayTag Effects_HitReact;
     
 private:
     static FAuraGameplayTags AuraGameplayTags;

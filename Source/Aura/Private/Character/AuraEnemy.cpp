@@ -6,8 +6,10 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemFunctionLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "AbilitySystem/AuraGameplayTags.h"
 #include "Aura/Aura.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
 
 AAuraEnemy::AAuraEnemy()   //HealthBarWidth(135.f),HealthBarHeight(13.f)
@@ -79,6 +81,12 @@ void AAuraEnemy::AttributeChangedDelegateBind()
 				OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
 			});
 
+		// 与指定GameplayTag相关事件发生时进行回调
+		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact,
+														EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,
+			&AAuraEnemy::HitReactTagChanged
+		);
 		// 广播初始值
 		OnHealthChangedDelegate.Broadcast(AuraAttributeSet->GetHealth());
 		OnMaxHealthChangedDelegate.Broadcast(AuraAttributeSet->GetMaxHealth());
@@ -87,8 +95,16 @@ void AAuraEnemy::AttributeChangedDelegateBind()
 	
 }
 
+void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0 ? true : false;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+}
+
 void AAuraEnemy::BeginPlay()
 {
+	// 设置初始的最大速度
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed; 
 	Super::BeginPlay();
 	InitAbilityActorInfo();
 	InitializeAttributeDefaults(); 
