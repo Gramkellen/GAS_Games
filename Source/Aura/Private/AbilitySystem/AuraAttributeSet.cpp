@@ -148,6 +148,14 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 
 			const bool bDied = NewHealth <= 0.f;
+
+			if(!bDied)
+			{
+				// 放在属性这里方便进行扩展，而且可能有非碰撞造成的伤害
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+				GetOwningAbilitySystemComponent()->TryActivateAbilitiesByTag(TagContainer);
+			}
 		}
 	}
 }

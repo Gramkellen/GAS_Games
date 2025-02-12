@@ -28,6 +28,7 @@ public:
 
 	virtual void InitAbilityActorInfo();
 
+	virtual UAnimMontage* GetHieReactMontage_Implementation() override;
 protected:
 	virtual void BeginPlay() override;
 
@@ -63,4 +64,7 @@ private:
 	// 初始的能力数组
 	UPROPERTY(EditAnywhere,Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>>StartupAbilities;
+
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TObjectPtr<UAnimMontage>HitReactMontage;
 };

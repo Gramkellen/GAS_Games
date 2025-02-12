@@ -36,6 +36,11 @@ void AAuraCharacterBase::InitAbilityActorInfo()
 	
 }
 
+UAnimMontage* AAuraCharacterBase::GetHieReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

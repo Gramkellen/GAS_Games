@@ -109,6 +109,7 @@ void AAuraEnemy::BeginPlay()
 	InitAbilityActorInfo();
 	InitializeAttributeDefaults(); 
 	AttributeChangedDelegateBind();
+	UAuraAbilitySystemFunctionLibrary::InitializeCommonAbilities(this,AbilitySystemComponent);
 }
 
 void AAuraEnemy::InitializeAttributeDefaults() const
