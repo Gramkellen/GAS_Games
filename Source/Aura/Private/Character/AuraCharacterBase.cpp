@@ -61,6 +61,25 @@ void AAuraCharacterBase::MultiCastDied_Implementation()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic,ECR_Block);
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);  // 否则会和 mesh冲突 / 角色离地面有距离
+	Dissolve();
+}
+
+void AAuraCharacterBase::Dissolve()
+{
+	if(IsValid(DissolveMaterialInstance))
+	{
+		// 转成Dynamic的Material主要是为了在运行时修改参数，静态的材料是没办法修改的
+		UMaterialInstanceDynamic *DissolveDynamicInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
+		GetMesh()->SetMaterial(0, DissolveDynamicInstance);
+		StartDissolveTimeline(DissolveDynamicInstance);
+	}
+
+	if(IsValid(WeaponDissolveMaterialInstance))
+	{
+		UMaterialInstanceDynamic *WeaponDissolveDynamicInstance = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
+		Weapon->SetMaterial(0, WeaponDissolveDynamicInstance);
+		StartWeaponDissolveTimeline(WeaponDissolveDynamicInstance);
+	}
 }
 
 void AAuraCharacterBase::BeginPlay()

@@ -34,6 +34,20 @@ public:
 
 	UFUNCTION(NetMulticast,Reliable)
 	virtual void MultiCastDied();
+
+	UPROPERTY(EditDefaultsOnly, Category="Dissolve")
+	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
+
+	UPROPERTY(EditDefaultsOnly, Category="Dissolve")
+	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartDissolveTimeline(UMaterialInstanceDynamic *DynamicDissolveInstance);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic *DynamicDissolveInstance);
+	
+	void Dissolve();
 protected:
 	virtual void BeginPlay() override;
 
