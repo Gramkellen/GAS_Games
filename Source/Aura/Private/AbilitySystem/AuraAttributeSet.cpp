@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/AuraGameplayTags.h"
+#include "Interaction/CombatInterface.h"
 #include "Net/UnrealNetwork.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
@@ -95,11 +96,11 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 
 	if(IsValid(Props.SourceASC) && Props.SourceASC->AbilityActorInfo.IsValid() && Props.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
 	{
-		Props.SourceAvaterActor = Props.SourceASC->AbilityActorInfo->AvatarActor.Get();
+		Props.SourceAvatarActor = Props.SourceASC->AbilityActorInfo->AvatarActor.Get();
 		Props.SourceController = Props.SourceASC->AbilityActorInfo->PlayerController.Get();
-		if(Props.SourceController == nullptr && Props.SourceAvaterActor!=nullptr)
+		if(Props.SourceController == nullptr && Props.SourceAvatarActor!=nullptr)
 		{
-			if(const APawn* Pawn = Cast<APawn>(Props.SourceAvaterActor))
+			if(const APawn* Pawn = Cast<APawn>(Props.SourceAvatarActor))
 			{
 				Props.SourceController = Pawn->GetController();
 			}
@@ -113,10 +114,10 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 
 	if(Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
 	{
-		Props.TargetAvaterActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+		Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
 		Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvaterActor);
-		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvaterActor);
+		Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvatarActor);
+		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
 	}
 }
 
@@ -129,12 +130,12 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		// GEngine->AddOnScreenDebugMessage(1,2.0f,FColor::Red,FString::Printf(TEXT("NewValue : %f"),GetHealth()));
-		UE_LOG(LogTemp,Warning,TEXT("The Health of %s is %f"),*Props.SourceAvaterActor->GetName(),GetHealth());
+		UE_LOG(LogTemp,Warning,TEXT("The Health of %s is %f"),*Props.SourceAvatarActor->GetName(),GetHealth());
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
 	}
 	if(Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
-		UE_LOG(LogTemp,Warning,TEXT("The Mana of %s is %f"),*Props.SourceAvaterActor->GetName(),GetMana());
+		UE_LOG(LogTemp,Warning,TEXT("The Mana of %s is %f"),*Props.SourceAvatarActor->GetName(),GetMana());
 		SetMana(FMath::Clamp(GetMana(),0.f,GetMaxMana()));
 	}
 	
@@ -148,8 +149,14 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 
 			const bool bDied = NewHealth <= 0.f;
-
-			if(!bDied)
+			if(bDied)
+			{
+				if(ICombatInterface *CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor))
+				{
+					CombatInterface->Died(); // 父类指针调用子类的虚函数
+				}
+			}
+			else
 			{
 				// 放在属性这里方便进行扩展，而且可能有非碰撞造成的伤害
 				FGameplayTagContainer TagContainer;

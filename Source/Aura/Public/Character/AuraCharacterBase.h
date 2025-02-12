@@ -29,6 +29,11 @@ public:
 	virtual void InitAbilityActorInfo();
 
 	virtual UAnimMontage* GetHieReactMontage_Implementation() override;
+
+	virtual void Died() override;
+
+	UFUNCTION(NetMulticast,Reliable)
+	virtual void MultiCastDied();
 protected:
 	virtual void BeginPlay() override;
 

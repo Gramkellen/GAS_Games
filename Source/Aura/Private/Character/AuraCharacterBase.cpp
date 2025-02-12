@@ -41,6 +41,28 @@ UAnimMontage* AAuraCharacterBase::GetHieReactMontage_Implementation()
 	return HitReactMontage;
 }
 
+void AAuraCharacterBase::Died()
+{
+	// 如果采用DetachFromActor,分离后不受Actor控制了，影响比较全，非局部影响
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+	MultiCastDied();
+}
+
+void AAuraCharacterBase::MultiCastDied_Implementation()
+{
+	Weapon->SetSimulatePhysics(true);
+	Weapon->SetEnableGravity(true);
+	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	Weapon->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic,ECR_Block);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);  // 否则会和 mesh冲突 / 角色离地面有距离
+}
+
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

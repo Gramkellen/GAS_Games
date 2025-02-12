@@ -12,7 +12,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
 
-AAuraEnemy::AAuraEnemy()   //HealthBarWidth(135.f),HealthBarHeight(13.f)
+AAuraEnemy::AAuraEnemy():LifeSpan(5.f)   //HealthBarWidth(135.f),HealthBarHeight(13.f)
 {
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility,ECR_Block);
 
@@ -99,6 +99,12 @@ void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCou
 {
 	bHitReacting = NewCount > 0 ? true : false;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+}
+
+void AAuraEnemy::Died()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Died();
 }
 
 void AAuraEnemy::BeginPlay()

@@ -32,4 +32,6 @@ public:
 	// BlueprintNativeEvent : 期望函数在蓝图中被重写，没有重写则调用 C++ 版本的
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHieReactMontage();
+
+	virtual void Died() = 0;
 };
