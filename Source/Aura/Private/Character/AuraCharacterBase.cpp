@@ -85,7 +85,6 @@ void AAuraCharacterBase::Dissolve()
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 FVector AAuraCharacterBase::GetWeaponSocketLocation()

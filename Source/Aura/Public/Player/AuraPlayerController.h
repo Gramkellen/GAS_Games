@@ -8,6 +8,7 @@
 #include "Input/AuraInputConfig.h"
 #include "AuraPlayerController.generated.h"
 
+class UDamageTextComponent;
 class USplineComponent;
 class UAuraAbilitySystemComponent;
 class IEnemyInterface;
@@ -25,7 +26,9 @@ public:
 	AAuraPlayerController();
 	
 	FHitResult GetCursorHit() const;
-	
+
+	UFUNCTION(Client, Reliable)
+	void ShowDamageText(float DamageValue, ACharacter* TargetCharacter);
 protected:
 	
 	virtual void BeginPlay() override;
@@ -98,4 +101,7 @@ private:
 	TObjectPtr<USplineComponent>Spline;  // 曲线去拟合路径
 
 	FHitResult CursorHit; // 同意保存CursorHit的事件
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };

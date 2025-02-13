@@ -5,7 +5,9 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/AuraGameplayTags.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "Player/AuraPlayerController.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -163,6 +165,16 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
 				GetOwningAbilitySystemComponent()->TryActivateAbilitiesByTag(TagContainer);
 			}
+
+			// Cast<AAuraPlayerController>(Props.SourceCharacter)
+			if(Props.SourceCharacter != Props.TargetCharacter)
+			{
+				if(AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)))
+				{
+					AuraPlayerController->ShowDamageText(LocalValue, Props.TargetCharacter);
+				}
+			}
+			
 		}
 	}
 }

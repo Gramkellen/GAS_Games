@@ -10,9 +10,11 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraGameplayTags.h"
 #include "Components/SplineComponent.h"
+#include "GameFramework/Character.h"
 #include "Input/AuraInputComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 AAuraPlayerController::AAuraPlayerController():
 		bShiftDown(false),
@@ -79,6 +81,18 @@ void AAuraPlayerController::AutoMove()
 FHitResult AAuraPlayerController::GetCursorHit() const
 {
 	return CursorHit;
+}
+
+void AAuraPlayerController::ShowDamageText_Implementation(float DamageValue, ACharacter* TargetCharacter)
+{
+	if(IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+		UDamageTextComponent* DamageTextComponent = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		DamageTextComponent->RegisterComponent();  // 动态创建的话需要进行注册
+		DamageTextComponent->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		DamageTextComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageTextComponent->SetDamageText(DamageValue);
+	}
 }
 
 void AAuraPlayerController::CursorTrace()
