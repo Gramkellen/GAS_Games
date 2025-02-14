@@ -13,7 +13,7 @@ struct AuraDamageStatics
 
 	AuraDamageStatics()
 	{
-		// 初始化时定义捕获的规则
+		// 初始化时定义捕获的规则, 这里是获取了 Effect目标的 Armor，比如可以减少对方的护甲这样
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, Armor, Target, false);
 	}
 };
