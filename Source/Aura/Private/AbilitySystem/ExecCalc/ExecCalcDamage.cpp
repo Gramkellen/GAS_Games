@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemFunctionLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/AuraGameplayTags.h"
 #include "Character/AuraCharacterBase.h"
@@ -48,34 +49,44 @@ void UExecCalcDamage::Execute_Implementation(const FGameplayEffectCustomExecutio
 
 	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
+	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
+	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
 
+	// 初始化参数
 	const FGameplayEffectSpec EffectSpec = ExecutionParams.GetOwningSpec();
-
 	const FGameplayTagContainer* SourceTags = EffectSpec.CapturedSourceTags.GetAggregatedTags();
 	const FGameplayTagContainer* TargetTags = EffectSpec.CapturedTargetTags.GetAggregatedTags();
 	FAggregatorEvaluateParameters EvaluateParameters;
 	EvaluateParameters.SourceTags = SourceTags;
 	EvaluateParameters.TargetTags = TargetTags;
 	
-	// 获取Target的 Block属性
+	// 获取Target的 Block属性，并根据 Block修改Damage
 	float BlockChance = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluateParameters,BlockChance);
 	float RandomValue = FMath::RandRange(0,100);
 	bool isBlocked = BlockChance > RandomValue ? true : false;
 	UE_LOG(LogTemp,Warning, TEXT("RandomValue = %f ,BlockChange = %f"),RandomValue, BlockChance);
-	
 	float Damage = EffectSpec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().DamageTag);
 	Damage = isBlocked ? Damage * 0.5 : Damage;
 
 	// 添加 Armor && ArmorPenetration
-	float TargetArmor = 0.f, SourceArmorPenetration = 0.f;
+	UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemFunctionLibrary::GetCharacterClassInfo(SourceAvatar);
+	FRealCurve* ArmorPenetrationCoefficientCurve =  CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"), FString());
+	FRealCurve* EffectArmorCoefficientCurve =  CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectArmor"), FString());
+	float TargetArmor = 0.f;
+	float SourceArmorPenetration = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef,EvaluateParameters, TargetArmor);
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef,EvaluateParameters, SourceArmorPenetration);
+	
 	UE_LOG(LogTemp, Warning, TEXT("SourceArmorPenetration = %f"),SourceArmorPenetration);
 	SourceArmorPenetration = FMath::Min<float>(SourceArmorPenetration,100.f);
-	float EffectArmor = TargetArmor * (100.f - SourceArmorPenetration)/ 100.f;
+	const float ArmorPenetrationCoefficient = ArmorPenetrationCoefficientCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+	float EffectArmor = TargetArmor * (100.f - SourceArmorPenetration * ArmorPenetrationCoefficient)/ 100.f;
+	
 	UE_LOG(LogTemp, Warning, TEXT("EffectArmor = %f"),EffectArmor);
-	Damage = Damage * (100 - EffectArmor) / 100.f;
+	const float EffectArmorCoefficient = EffectArmorCoefficientCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	Damage = Damage * (100 - EffectArmor * EffectArmorCoefficient) / 100.f;
+	
 	// 目标属性来叠加这个值
 	const FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetInComingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
