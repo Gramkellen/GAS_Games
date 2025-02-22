@@ -59,7 +59,7 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 public:
 	UAuraAttributeSet();
 
-	TMap<FGameplayTag,FGameplayAttribute> AttributeInfoMap;
+	TMap<FGameplayTag, FGameplayAttribute> AttributeInfoMap;
 
 	// 用来定义哪些属性应当被复制，有点相当于注册，使用属性同步时需要重载
 	/*
@@ -74,7 +74,7 @@ public:
 	// #param FGameplayEffectModCallbackData - 需要添加 EffectExtension头文件，参考官网
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
-	void ShowFloatinDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const;
+	void ShowFloatingDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const;
 	
 	// Primary Properties
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Strength, Category = "Attributes|Primary Attribute")
@@ -133,6 +133,24 @@ public:
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxMana, Category = "Attributes|Secondary Attribute")
 	FGameplayAttributeData MaxMana;  // 最大法力值
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxMana);
+
+	// Resistance
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = Rep_Resistance_Fire, Category="Attributes|Secondary Attribute|Resistance")
+	FGameplayAttributeData Resistance_Fire;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Resistance_Fire);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = Rep_Resistance_Lightning, Category="Attributes|Secondary Attribute|Resistance")
+	FGameplayAttributeData Resistance_Lightning;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Resistance_Lightning);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = Rep_Resistance_Arcane, Category="Attributes|Secondary Attribute|Resistance")
+	FGameplayAttributeData Resistance_Arcane;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Resistance_Arcane);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = Rep_Resistance_Physical, Category="Attributes|Secondary Attribute|Resistance")
+	FGameplayAttributeData Resistance_Physical;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Resistance_Physical);
+
 	
 	// Vital Properties
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Health, Category = "Attributes|Vital Attribute")
@@ -196,6 +214,18 @@ public:
 
 	UFUNCTION()
 	void Rep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration)const;
+
+	UFUNCTION()
+	void Rep_Resistance_Fire(const FGameplayAttributeData& OldResistanceFire)const;
+
+	UFUNCTION()
+	void Rep_Resistance_Lightning(const FGameplayAttributeData& OldResistanceLightning)const;
+
+	UFUNCTION()
+	void Rep_Resistance_Arcane(const FGameplayAttributeData& OldResistanceArcane)const;
+
+	UFUNCTION()
+	void Rep_Resistance_Physical(const FGameplayAttributeData& OldResistancePhysical)const;
 	
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;

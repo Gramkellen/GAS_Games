@@ -76,7 +76,7 @@ public:
 	// 抗性 (弹性）
 	FGameplayTag Attributes_Primary_Resilience;
 
-	// 所以的Gamplay Tag，便于访问和初始化
+	// 所以的 Gamplay Tag，便于访问和初始化
 	TArray<FGameplayTag> TotalGameplayTags;
 	
 	/*
@@ -90,12 +90,24 @@ public:
 	FGameplayTag Input_4;
 
 	/* 
-	 * DamageTag
+	 * Damage Tags
 	 */
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
-	TArray<FGameplayTag>DamageTypes;
+	FGameplayTag Damage_Lightning;
+	FGameplayTag Damage_Arcane;
+	FGameplayTag Damage_Physical;
+	
+	/*
+	 * Resistance Tags
+	 */
+	FGameplayTag Attributes_Resistance_Fire;
+	FGameplayTag Attributes_Resistance_Lightning;
+	FGameplayTag Attributes_Resistance_Arcane;
+	FGameplayTag Attributes_Resistance_Physical;
 
+	// Damage to Resistance
+	TMap<FGameplayTag, FGameplayTag>DamageTypestoResistance;
 	
 	/*
 	 * Effect Tags

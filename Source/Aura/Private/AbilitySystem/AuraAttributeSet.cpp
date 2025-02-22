@@ -23,7 +23,7 @@ UAuraAttributeSet::UAuraAttributeSet()
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Resilience,GetResilienceAttribute());
 	
 	/**
-	* Add Primary Map
+	* Add Another 
 	*/
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_Armor,GetArmorAttribute());
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_ArmorPenetration,GetArmorPenetrationAttribute());
@@ -35,8 +35,14 @@ UAuraAttributeSet::UAuraAttributeSet()
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_ManaRegeneration,GetManaRegenerationAttribute());
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxHealth,GetMaxHealthAttribute());
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxMana,GetMaxManaAttribute());
+
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Fire, GetResistance_FireAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Lightning, GetResistance_LightningAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Arcane, GetResistance_ArcaneAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Physical, GetResistance_PhysicalAttribute());
 }
 
+// GAS 中用来在类中注册需要进行网路同步的属性
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -74,6 +80,14 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,HealthRegeneration,COND_None,REPNOTIFY_Always);
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Fire, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Lightning, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Arcane, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Physical, COND_None, REPNOTIFY_Always);
 }
 
 
@@ -170,12 +184,12 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			// Cast<AAuraPlayerController>(Props.SourceCharacter)
 			bool isBlocked = UAuraAbilitySystemFunctionLibrary::IsBlocked(Props.EffectContextHandle);
 			bool isCritialHit = UAuraAbilitySystemFunctionLibrary::IsCriticalHit(Props.EffectContextHandle);
-			ShowFloatinDamageText(Props, LocalValue,isBlocked, isCritialHit);
+			ShowFloatingDamageText(Props, LocalValue,isBlocked, isCritialHit);
 		}
 	}
 }
 
-void UAuraAttributeSet::ShowFloatinDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const
+void UAuraAttributeSet::ShowFloatingDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const
 {
 	if(Props.SourceCharacter != Props.TargetCharacter)
 	{
@@ -265,6 +279,26 @@ void UAuraAttributeSet::Rep_HealthRegeneration(const FGameplayAttributeData& Old
 void UAuraAttributeSet::Rep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,ManaRegeneration,OldManaRegeneration);
+}
+
+void UAuraAttributeSet::Rep_Resistance_Fire(const FGameplayAttributeData& OldResistanceFire) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Fire,OldResistanceFire);
+}
+
+void UAuraAttributeSet::Rep_Resistance_Lightning(const FGameplayAttributeData& OldResistanceLightning) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Lightning,OldResistanceLightning);
+}
+
+void UAuraAttributeSet::Rep_Resistance_Arcane(const FGameplayAttributeData& OldResistanceArcane) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Arcane,OldResistanceArcane);
+}
+
+void UAuraAttributeSet::Rep_Resistance_Physical(const FGameplayAttributeData& OldResistancePhysical) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Physical,OldResistancePhysical);
 }
 
 

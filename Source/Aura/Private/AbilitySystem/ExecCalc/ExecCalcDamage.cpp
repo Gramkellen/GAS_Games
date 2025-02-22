@@ -80,9 +80,9 @@ void UExecCalcDamage::Execute_Implementation(const FGameplayEffectCustomExecutio
 	UE_LOG(LogTemp,Warning, TEXT("RandomValue = %f ,BlockChange = %f"),RandomValue, BlockChance);
 	float Damage = 0.f;
 	// 获取 Caller 中存在的所有的伤害类型
-	for(FGameplayTag DamageTag:FAuraGameplayTags::Get().DamageTypes)
+	for(const TTuple<FGameplayTag, FGameplayTag>&Pair:FAuraGameplayTags::Get().DamageTypestoResistance)
 	{
-		Damage += EffectSpec.GetSetByCallerMagnitude(DamageTag);
+		Damage += EffectSpec.GetSetByCallerMagnitude(Pair.Key);
 	}
 	Damage = isBlocked ? Damage * 0.5 : Damage;
 
