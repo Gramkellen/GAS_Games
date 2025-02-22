@@ -28,7 +28,8 @@ public:
 	FHitResult GetCursorHit() const;
 
 	UFUNCTION(Client, Reliable)
-	void ShowDamageText(float DamageValue, ACharacter* TargetCharacter);
+	void ShowDamageText(float DamageValue, ACharacter* TargetCharacter, bool bBlocked, bool bCriticalHit);
+	
 protected:
 	
 	virtual void BeginPlay() override;

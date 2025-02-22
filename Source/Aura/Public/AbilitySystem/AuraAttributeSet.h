@@ -67,12 +67,14 @@ public:
 	 */
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// Usually Clamp Vlaue In PreAttribute Change
+	// Usually Clamp Value In PreAttribute Change
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
 	// GE执行之后，获取对应的信息
 	// #param FGameplayEffectModCallbackData - 需要添加 EffectExtension头文件，参考官网
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+	void ShowFloatinDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const;
 	
 	// Primary Properties
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Strength, Category = "Attributes|Primary Attribute")

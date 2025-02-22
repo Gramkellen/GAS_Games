@@ -83,7 +83,7 @@ FHitResult AAuraPlayerController::GetCursorHit() const
 	return CursorHit;
 }
 
-void AAuraPlayerController::ShowDamageText_Implementation(float DamageValue, ACharacter* TargetCharacter)
+void AAuraPlayerController::ShowDamageText_Implementation(float DamageValue, ACharacter* TargetCharacter, bool bBlocked, bool bCriticalHit)
 {
 	if(IsValid(TargetCharacter) && DamageTextComponentClass)
 	{
@@ -91,7 +91,7 @@ void AAuraPlayerController::ShowDamageText_Implementation(float DamageValue, ACh
 		DamageTextComponent->RegisterComponent();  // 动态创建的话需要进行注册
 		DamageTextComponent->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 		DamageTextComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		DamageTextComponent->SetDamageText(DamageValue);
+		DamageTextComponent->SetDamageText(DamageValue, bBlocked, bCriticalHit);
 	}
 }
 

@@ -123,3 +123,26 @@ FAuraGameplayEffectContext* FAuraGameplayEffectContext::Duplicate() const
 	}
 	return NewContext;
 }
+
+
+bool FAuraGameplayEffectContext::GetIsBlocked() const
+{
+	return bIsBlocked;
+}
+
+void FAuraGameplayEffectContext::SetIsBlocked(bool bIsInBlocked)
+{
+	bIsBlocked = bIsInBlocked;
+}
+
+bool FAuraGameplayEffectContext::GetIsCriticalHit() const
+{
+	return bIsCriticalHit;
+}
+
+void FAuraGameplayEffectContext::SetIsCriticalHit(bool bIsInCriticalHit)
+{
+	bIsCriticalHit = bIsInCriticalHit;
+}
+
+

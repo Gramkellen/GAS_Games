@@ -15,8 +15,16 @@ public:
 	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess) override;
 
 	virtual FAuraGameplayEffectContext* Duplicate() const;
-protected:
 
+	bool GetIsBlocked() const;
+
+	void SetIsBlocked(bool bIsInBlocked);
+
+	bool GetIsCriticalHit() const;
+	
+	void SetIsCriticalHit(bool bIsInCriticalHit);
+	
+protected:
 	UPROPERTY()
 	bool bIsBlocked = false;
 

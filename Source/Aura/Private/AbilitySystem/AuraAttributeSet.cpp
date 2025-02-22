@@ -3,6 +3,7 @@
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/AuraAbilitySystemFunctionLibrary.h"
 #include "AbilitySystem/AuraGameplayTags.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -167,14 +168,20 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			}
 
 			// Cast<AAuraPlayerController>(Props.SourceCharacter)
-			if(Props.SourceCharacter != Props.TargetCharacter)
-			{
-				if(AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)))
-				{
-					AuraPlayerController->ShowDamageText(LocalValue, Props.TargetCharacter);
-				}
-			}
-			
+			bool isBlocked = UAuraAbilitySystemFunctionLibrary::IsBlocked(Props.EffectContextHandle);
+			bool isCritialHit = UAuraAbilitySystemFunctionLibrary::IsCriticalHit(Props.EffectContextHandle);
+			ShowFloatinDamageText(Props, LocalValue,isBlocked, isCritialHit);
+		}
+	}
+}
+
+void UAuraAttributeSet::ShowFloatinDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const
+{
+	if(Props.SourceCharacter != Props.TargetCharacter)
+	{
+		if(AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)))
+		{
+			AuraPlayerController->ShowDamageText(Damage, Props.TargetCharacter,bBlocked, bCriticalHit);
 		}
 	}
 }
