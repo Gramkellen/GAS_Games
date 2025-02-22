@@ -89,9 +89,14 @@ public:
 	FGameplayTag Input_3;
 	FGameplayTag Input_4;
 
-	// DamageTag
-	FGameplayTag DamageTag;
+	/* 
+	 * DamageTag
+	 */
+	FGameplayTag Damage;
+	FGameplayTag Damage_Fire;
+	TArray<FGameplayTag>DamageTypes;
 
+	
 	/*
 	 * Effect Tags
 	 */

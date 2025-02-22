@@ -75,8 +75,9 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	AuraGameplayTags.Input_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.RMB"),FString("Ability Input Right Mouse Button"));
 
 	// Damage Tag Add
-	AuraGameplayTags.DamageTag = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("DamageTag"), FString("Damage Tag"));
-
+	AuraGameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage"), FString("Damage Tag"));
+	AuraGameplayTags.Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Fire"),FString("Damage_Fire"));
+	AuraGameplayTags.DamageTypes.Add(AuraGameplayTags.Damage_Fire);
 	// Effect Tags
 	AuraGameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Effects.HitReact"), FString("React When Damaged"));
 

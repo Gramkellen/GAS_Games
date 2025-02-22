@@ -78,7 +78,12 @@ void UExecCalcDamage::Execute_Implementation(const FGameplayEffectCustomExecutio
 	bool isBlocked = BlockChance > RandomValue ? true : false;
 	UAuraAbilitySystemFunctionLibrary::SetBlocked(ContextHandle, isBlocked);
 	UE_LOG(LogTemp,Warning, TEXT("RandomValue = %f ,BlockChange = %f"),RandomValue, BlockChance);
-	float Damage = EffectSpec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().DamageTag);
+	float Damage = 0.f;
+	// 获取 Caller 中存在的所有的伤害类型
+	for(FGameplayTag DamageTag:FAuraGameplayTags::Get().DamageTypes)
+	{
+		Damage += EffectSpec.GetSetByCallerMagnitude(DamageTag);
+	}
 	Damage = isBlocked ? Damage * 0.5 : Damage;
 
 	// 添加 Armor && ArmorPenetration

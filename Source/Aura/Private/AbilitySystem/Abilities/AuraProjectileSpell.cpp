@@ -35,9 +35,13 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		UAbilitySystemComponent* SourceASC =  UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		const FGameplayEffectContextHandle ContextHandle =  SourceASC->MakeEffectContext();
 		const FGameplayEffectSpecHandle DamageSpecHandle =  SourceASC->MakeOutgoingSpec(DamageEffectClass,Level,ContextHandle);
-		FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();  // 获取所有的Tags
+
+		// 获取所有的Tags
 		// 动态设置SetByCaller的值，可以通过Spec访问
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, GameplayTags.DamageTag, Damage.GetValueAtLevel(Level));
+		for(auto& Pair:DamageTypes)
+		{
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle,Pair.Key, Pair.Value.GetValueAtLevel(Level));
+		}
 		
 		const FGameplayEffectSpecHandle DeBuffSpecHandle = SourceASC->MakeOutgoingSpec(DeBuffEffectClass,Level,ContextHandle);
 		Projectile->DamageEffectSpecHandle = DamageSpecHandle;
