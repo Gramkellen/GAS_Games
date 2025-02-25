@@ -36,10 +36,10 @@ UAuraAttributeSet::UAuraAttributeSet()
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxHealth,GetMaxHealthAttribute());
 	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxMana,GetMaxManaAttribute());
 
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Fire, GetResistance_FireAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Lightning, GetResistance_LightningAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Arcane, GetResistance_ArcaneAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Physical, GetResistance_PhysicalAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Fire, GetFireResistanceAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Lightning, GetLightningResistanceAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Arcane, GetArcaneResistanceAttribute());
+	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Physical, GetPhysicalResistanceAttribute());
 }
 
 // GAS 中用来在类中注册需要进行网路同步的属性
@@ -81,13 +81,13 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Fire, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, FireResistance, COND_None, REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Lightning, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Arcane, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Physical, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
 }
 
 
@@ -281,24 +281,24 @@ void UAuraAttributeSet::Rep_ManaRegeneration(const FGameplayAttributeData& OldMa
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,ManaRegeneration,OldManaRegeneration);
 }
 
-void UAuraAttributeSet::Rep_Resistance_Fire(const FGameplayAttributeData& OldResistanceFire) const
+void UAuraAttributeSet::Rep_FireResistance(const FGameplayAttributeData& OldResistanceFire) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Fire,OldResistanceFire);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,FireResistance,OldResistanceFire);
 }
 
-void UAuraAttributeSet::Rep_Resistance_Lightning(const FGameplayAttributeData& OldResistanceLightning) const
+void UAuraAttributeSet::Rep_LightningResistance(const FGameplayAttributeData& OldResistanceLightning) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Lightning,OldResistanceLightning);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,LightningResistance,OldResistanceLightning);
 }
 
-void UAuraAttributeSet::Rep_Resistance_Arcane(const FGameplayAttributeData& OldResistanceArcane) const
+void UAuraAttributeSet::Rep_ArcaneResistance(const FGameplayAttributeData& OldResistanceArcane) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Arcane,OldResistanceArcane);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,ArcaneResistance,OldResistanceArcane);
 }
 
-void UAuraAttributeSet::Rep_Resistance_Physical(const FGameplayAttributeData& OldResistancePhysical) const
+void UAuraAttributeSet::Rep_PhysicalResistance(const FGameplayAttributeData& OldResistancePhysical) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Resistance_Physical,OldResistancePhysical);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,PhysicalResistance,OldResistancePhysical);
 }
 
 

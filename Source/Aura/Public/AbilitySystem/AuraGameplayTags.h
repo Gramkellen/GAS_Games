@@ -12,7 +12,7 @@
 struct FAuraGameplayTags
 {
 public:
-    static const FAuraGameplayTags& Get(){return AuraGameplayTags;}
+    static const FAuraGameplayTags& Get(){ return AuraGameplayTags;}
 
     static void InitializeNativeGameplayTags();
 
@@ -107,7 +107,7 @@ public:
 	FGameplayTag Attributes_Resistance_Physical;
 
 	// Damage to Resistance
-	TMap<FGameplayTag, FGameplayTag>DamageTypestoResistance;
+	TMap<FGameplayTag, FGameplayTag> DamageTypestoResistance;
 	
 	/*
 	 * Effect Tags
