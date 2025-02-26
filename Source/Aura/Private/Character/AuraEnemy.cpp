@@ -52,10 +52,7 @@ void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-	if(HasAuthority())
-	{
-		InitializeAttributeDefaults();
-	}
+	if(HasAuthority()) InitializeAttributeDefaults();
 }
 
 int32 AAuraEnemy::GetPlayerLevel()
@@ -65,37 +62,7 @@ int32 AAuraEnemy::GetPlayerLevel()
 
 void AAuraEnemy::AttributeChangedDelegateBind()
 {
-	// 绑定 HealthBar的 WidgetController
-	if(UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
-	{
-		AuraUserWidget->SetWidgetController(this);
-	}
 	
-	// 绑定属性变化的委托事件
-	if(const UAuraAttributeSet* AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet))
-	{
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
-			[this](const FOnAttributeChangeData& Data)
-			{
-				OnHealthChangedDelegate.Broadcast(Data.NewValue);
-			});
-		
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute()).AddLambda(
-			[this](const FOnAttributeChangeData& Data)
-			{
-				OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
-			});
-
-		// 与指定GameplayTag相关事件发生时进行回调
-		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact,
-														EGameplayTagEventType::NewOrRemoved).AddUObject(
-			this,
-			&AAuraEnemy::HitReactTagChanged
-		);
-		// 广播初始值
-		OnHealthChangedDelegate.Broadcast(AuraAS->GetHealth());
-		OnMaxHealthChangedDelegate.Broadcast(AuraAS->GetMaxHealth());
-	}
 }
 
 void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCount)
@@ -121,7 +88,38 @@ void AAuraEnemy::BeginPlay()
 		// 服务器才能进行属性初始化,因为GameMode只能在服务器进行获取，客户端获取为nullptr会导致error
 		UAuraAbilitySystemFunctionLibrary::InitializeCommonAbilities(this,AbilitySystemComponent);
 	}
-	AttributeChangedDelegateBind();
+
+	
+	// 绑定 HealthBar的 WidgetController
+	if(UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		AuraUserWidget->SetWidgetController(this);
+	}
+	// 绑定属性变化的委托事件
+	if(const UAuraAttributeSet* AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnHealthChangedDelegate.Broadcast(Data.NewValue);
+			});
+		
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
+			});
+
+		// 与指定GameplayTag相关事件发生时进行回调
+		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact,
+														EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,
+			&AAuraEnemy::HitReactTagChanged
+		);
+		// 广播初始值
+		OnHealthChangedDelegate.Broadcast(AuraAS->GetHealth());
+		OnMaxHealthChangedDelegate.Broadcast(AuraAS->GetMaxHealth());
+	}
 }
 
 void AAuraEnemy::InitializeAttributeDefaults() const
