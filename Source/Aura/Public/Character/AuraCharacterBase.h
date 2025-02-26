@@ -62,16 +62,16 @@ protected:
 	UPROPERTY(VisibleAnywhere,Category ="AbilitySystem")
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
-	UPROPERTY(BlueprintReadWrite,Category="AbilitySystem")
+	UPROPERTY(VisibleAnywhere,Category="AbilitySystem")
 	TObjectPtr<UAttributeSet>AttributeSet;
 
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category = "Primary Attribute")
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category = "Attributes")
 	TSubclassOf<UGameplayEffect>DefaultPrimaryAttributesClass;
 
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Secondary Attribute")
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
 	TSubclassOf<UGameplayEffect>DefaultSecondaryAttributeClass;
 
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Vital Attribute")
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
 	TSubclassOf<UGameplayEffect>DefaultVitalAttributeClass;
 	
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass,float Level) const;

@@ -26,16 +26,14 @@ public:
 
 	virtual void UnHighlightActor() override;
 
-	virtual void InitAbilityActorInfo() override;
-
 	virtual  int32 GetPlayerLevel() override;
+
+	virtual void Died() override;
 
 	void AttributeChangedDelegateBind();
 
 	void HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCount);
-
-	virtual void Died() override;
-
+	
 	UPROPERTY(BlueprintReadOnly, Category="Combat")
 	bool bHitReacting = false;
 
@@ -44,25 +42,28 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="Combat")
 	float LifeSpan;
-	
-protected:
-	
-	virtual void BeginPlay() override;
-
-	virtual void InitializeAttributeDefaults() const override;
-
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Level")
-	int32 Level = 1;
-
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Level")
-	ECharacterClass CharacterClass = ECharacterClass::Warrior;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UWidgetComponent>HealthBar;
 
 	UPROPERTY(BlueprintAssignable)
 	FAttributeChangedDelegate OnHealthChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable)
 	FAttributeChangedDelegate OnMaxHealthChangedDelegate;
+protected:
+	
+	virtual void BeginPlay() override;
+
+	virtual void InitAbilityActorInfo() override;
+	
+	virtual void InitializeAttributeDefaults() const override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Character Class Defaults")
+	int32 Level = 1;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent>HealthBar;
+
+
 };

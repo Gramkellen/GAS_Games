@@ -3,7 +3,6 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "UI/WidgetController/AuraWidgetController.h"
-#include "Aura/Aura.h"
 #include "OverlayWidgetController.generated.h"
 
 class UAuraUserWidget;

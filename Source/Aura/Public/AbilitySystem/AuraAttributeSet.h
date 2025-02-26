@@ -23,6 +23,7 @@ struct FEffectProperties
 	GENERATED_BODY()
 
 	FEffectProperties(){};
+	
 	FGameplayEffectContextHandle EffectContextHandle;
 
 	UPROPERTY()
@@ -51,6 +52,9 @@ struct FEffectProperties
 	
 };
 
+template<class T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
@@ -59,7 +63,7 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 public:
 	UAuraAttributeSet();
 
-	TMap<FGameplayTag, FGameplayAttribute> AttributeInfoMap;
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
 
 	// 用来定义哪些属性应当被复制，有点相当于注册，使用属性同步时需要重载
 	/*
@@ -73,8 +77,6 @@ public:
 	// GE执行之后，获取对应的信息
 	// #param FGameplayEffectModCallbackData - 需要添加 EffectExtension头文件，参考官网
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-
-	void ShowFloatingDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const;
 	
 	// Primary Properties
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_Strength, Category = "Attributes|Primary Attribute")
@@ -229,4 +231,6 @@ public:
 	
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
+
+	void ShowFloatingDamageText(const FEffectProperties& Props, float Damage, bool bBlocked, bool bCriticalHit) const;
 };

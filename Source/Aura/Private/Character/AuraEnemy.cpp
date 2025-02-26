@@ -66,12 +66,12 @@ int32 AAuraEnemy::GetPlayerLevel()
 void AAuraEnemy::AttributeChangedDelegateBind()
 {
 	// 绑定 HealthBar的 WidgetController
-	if(UAuraUserWidget* AuraUserWidget = CastChecked<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
+	if(UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		AuraUserWidget->SetWidgetController(this);
 	}
-	// 绑定属性变化的委托事件
 	
+	// 绑定属性变化的委托事件
 	if(const UAuraAttributeSet* AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet))
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
@@ -96,13 +96,11 @@ void AAuraEnemy::AttributeChangedDelegateBind()
 		OnHealthChangedDelegate.Broadcast(AuraAS->GetHealth());
 		OnMaxHealthChangedDelegate.Broadcast(AuraAS->GetMaxHealth());
 	}
-
-	
 }
 
 void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCount)
 {
-	bHitReacting = NewCount > 0 ? true : false;
+	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 }
 

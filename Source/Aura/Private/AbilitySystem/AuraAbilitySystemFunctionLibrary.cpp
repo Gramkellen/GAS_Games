@@ -22,7 +22,6 @@ UOverlayWidgetController* UAuraAbilitySystemFunctionLibrary::GetOverlayWidgetCon
 		const FWidgetControllerParams Params(PlayerController,PlayerState,AbilitySystemComponent,AttributeSet);
 		return AuraHUD->GetOverlayWidgetController(Params);
 	}
-
 	return nullptr;
 }
 
@@ -43,10 +42,11 @@ UAttributeMenuWidgetController* UAuraAbilitySystemFunctionLibrary::GetAttributeM
 void UAuraAbilitySystemFunctionLibrary::InitializeAttributeDefaults(const UObject* WorldContext,
 	ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC)
 {
-	UCharacterClassInfo *CharacterClassInfo = GetCharacterClassInfo(WorldContext);
-	FCharacterClassDefaultInfo ClassDefaultInfo =  CharacterClassInfo->CharacterClassInformation[CharacterClass];
 	AActor* AvatarActor = ASC->GetAvatarActor();
-
+	
+	UCharacterClassInfo *CharacterClassInfo = GetCharacterClassInfo(WorldContext);
+	FCharacterClassDefaultInfo ClassDefaultInfo =  CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	
 	// PrimaryAttributes初始化
  	FGameplayEffectContextHandle PrimaryAttributeContextHandle =  ASC->MakeEffectContext();
 	PrimaryAttributeContextHandle.AddSourceObject(AvatarActor);  // 不添加SourceActor会导致缺少Effect来源

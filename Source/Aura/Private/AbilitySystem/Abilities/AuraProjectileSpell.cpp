@@ -10,6 +10,7 @@
 void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
 	// 确保只有服务器能够生成
+	// 技能的真正执行（如数据变化、状态应用等）是由服务器来处理的, 客户端触发的话服务器会进行执行和验证
 	if(!GetAvatarActorFromActorInfo()->HasAuthority()) return;
 	
 	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))

@@ -12,34 +12,32 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	InitHealth(100.f);
-	InitMana(60.f);
 	/**
 	 * Add Primary Map
 	 */
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Strength,GetStrengthAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Vigor,GetVigorAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Intelligence,GetIntelligenceAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Primary_Resilience,GetResilienceAttribute());
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Primary_Strength,GetStrengthAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Primary_Vigor,GetVigorAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Primary_Intelligence,GetIntelligenceAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Primary_Resilience,GetResilienceAttribute);
 	
 	/**
 	* Add Another 
 	*/
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_Armor,GetArmorAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_ArmorPenetration,GetArmorPenetrationAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_BlockChance,GetBlockChanceAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitChance,GetCriticalHitChanceAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitDamage,GetCriticalHitDamageAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitResistance,GetCriticalHitResistanceAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_HealthRegeneration,GetHealthRegenerationAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_ManaRegeneration,GetManaRegenerationAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxHealth,GetMaxHealthAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxMana,GetMaxManaAttribute());
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_Armor,GetArmorAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_ArmorPenetration,GetArmorPenetrationAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_BlockChance,GetBlockChanceAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitChance,GetCriticalHitChanceAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitDamage,GetCriticalHitDamageAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_CriticalHitResistance,GetCriticalHitResistanceAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_HealthRegeneration,GetHealthRegenerationAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_ManaRegeneration,GetManaRegenerationAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxHealth,GetMaxHealthAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Secondary_MaxMana,GetMaxManaAttribute);
 
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Fire, GetFireResistanceAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Lightning, GetLightningResistanceAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Arcane, GetArcaneResistanceAttribute());
-	AttributeInfoMap.Add(FAuraGameplayTags::Get().Attributes_Resistance_Physical, GetPhysicalResistanceAttribute());
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Resistance_Fire, GetFireResistanceAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Resistance_Lightning, GetLightningResistanceAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Resistance_Arcane, GetArcaneResistanceAttribute);
+	TagsToAttributes.Add(FAuraGameplayTags::Get().Attributes_Resistance_Physical, GetPhysicalResistanceAttribute);
 }
 
 // GAS 中用来在类中注册需要进行网路同步的属性
@@ -50,10 +48,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	// 默认是 Changed才通知，Always是希望更新值，但是值和原来一样的时候也能做些事情
 	// 这里是将网络同步的属性进行注册
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
-	
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
-
+	// Primary Attribute
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Strength,COND_None,REPNOTIFY_Always);
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Intelligence,COND_None,REPNOTIFY_Always);
@@ -64,6 +59,8 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Armor,COND_None,REPNOTIFY_Always);
 
+	
+	// Secondary Attribute
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,ArmorPenetration,COND_None,REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,BlockChance,COND_None,REPNOTIFY_Always);
@@ -77,7 +74,12 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,HealthRegeneration,COND_None,REPNOTIFY_Always);
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
 
+	// Resistance Attribute
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, FireResistance, COND_None, REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
@@ -86,6 +88,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
 
+	// Vital Attribute
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Health, COND_None, REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
@@ -148,13 +151,11 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-		// GEngine->AddOnScreenDebugMessage(1,2.0f,FColor::Red,FString::Printf(TEXT("NewValue : %f"),GetHealth()));
 		UE_LOG(LogTemp,Warning,TEXT("The Health of %s is %f"),*Props.SourceAvatarActor->GetName(),GetHealth());
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
 	}
 	if(Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
-		UE_LOG(LogTemp,Warning,TEXT("The Mana of %s is %f"),*Props.SourceAvatarActor->GetName(),GetMana());
 		SetMana(FMath::Clamp(GetMana(),0.f,GetMaxMana()));
 	}
 	
@@ -184,9 +185,9 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			}
 
 			// Cast<AAuraPlayerController>(Props.SourceCharacter)
-			bool isBlocked = UAuraAbilitySystemFunctionLibrary::IsBlocked(Props.EffectContextHandle);
-			bool isCritialHit = UAuraAbilitySystemFunctionLibrary::IsCriticalHit(Props.EffectContextHandle);
-			ShowFloatingDamageText(Props, LocalValue,isBlocked, isCritialHit);
+			const bool isBlocked = UAuraAbilitySystemFunctionLibrary::IsBlocked(Props.EffectContextHandle);
+			const bool isCriticalHit = UAuraAbilitySystemFunctionLibrary::IsCriticalHit(Props.EffectContextHandle);
+			ShowFloatingDamageText(Props, LocalValue,isBlocked, isCriticalHit);
 		}
 	}
 }

@@ -116,9 +116,17 @@ https://blog.csdn.net/qq_30100043/article/details/138033334
 
  **探索问题：？？？ 可是很奇怪，服务器会调用吗？？？**
 
+:m: 服务器会调用
+
 #### 客户端的敌人的血条不显示和更新
 
-#### 双客户端模式，FireBlot刚出去就爆炸了
+属性没有同步过来，真的有点奇怪
+
+#### 双客户端模式，FireBolt刚出去就爆炸了
+
+Overlap的触发问题，明明没有Overlap，但是火球和另一个Character显示Overlap了（Debug发现的）
+
+因此将Character对这个火球（FireBolt)的Overlap给取消掉
 
 ## 开发疑惑点
 
