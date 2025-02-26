@@ -19,10 +19,11 @@ AAuraEnemy::AAuraEnemy():LifeSpan(5.f)   //HealthBarWidth(135.f),HealthBarHeight
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
-	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("Attribute");
+	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+
+
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
-	// HealthBar->SetDrawSize(FVector2D(HealthBarWidth,HealthBarHeight));
 	HealthBar->SetDrawAtDesiredSize(true);
 	HealthBar->SetRelativeLocation(FVector(0.f,0.f,70.f));
 }
@@ -51,6 +52,10 @@ void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	if(HasAuthority())
+	{
+		InitializeAttributeDefaults();
+	}
 }
 
 int32 AAuraEnemy::GetPlayerLevel()
@@ -65,17 +70,17 @@ void AAuraEnemy::AttributeChangedDelegateBind()
 	{
 		AuraUserWidget->SetWidgetController(this);
 	}
-
 	// 绑定属性变化的委托事件
-	if(const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet))
+	
+	if(const UAuraAttributeSet* AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet))
 	{
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddLambda(
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnHealthChangedDelegate.Broadcast(Data.NewValue);
 			});
 		
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
@@ -88,8 +93,8 @@ void AAuraEnemy::AttributeChangedDelegateBind()
 			&AAuraEnemy::HitReactTagChanged
 		);
 		// 广播初始值
-		OnHealthChangedDelegate.Broadcast(AuraAttributeSet->GetHealth());
-		OnMaxHealthChangedDelegate.Broadcast(AuraAttributeSet->GetMaxHealth());
+		OnHealthChangedDelegate.Broadcast(AuraAS->GetHealth());
+		OnMaxHealthChangedDelegate.Broadcast(AuraAS->GetMaxHealth());
 	}
 
 	
@@ -109,13 +114,16 @@ void AAuraEnemy::Died()
 
 void AAuraEnemy::BeginPlay()
 {
-	// 设置初始的最大速度
-	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed; 
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed; // 设置初始的最大速度
 	InitAbilityActorInfo();
-	InitializeAttributeDefaults(); 
+
+	if (HasAuthority())
+	{
+		// 服务器才能进行属性初始化,因为GameMode只能在服务器进行获取，客户端获取为nullptr会导致error
+		UAuraAbilitySystemFunctionLibrary::InitializeCommonAbilities(this,AbilitySystemComponent);
+	}
 	AttributeChangedDelegateBind();
-	UAuraAbilitySystemFunctionLibrary::InitializeCommonAbilities(this,AbilitySystemComponent);
 }
 
 void AAuraEnemy::InitializeAttributeDefaults() const

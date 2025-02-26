@@ -49,11 +49,8 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	// 默认是 Changed才通知，Always是希望更新值，但是值和原来一样的时候也能做些事情
 	// 这里是将网络同步的属性进行注册
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Health,COND_None, REPNOTIFY_Always);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,MaxHealth,COND_None,REPNOTIFY_Always);
-
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,Mana,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
 
@@ -88,6 +85,10 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Health, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 }
 
 
@@ -97,11 +98,11 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	Super::PreAttributeChange(Attribute, NewValue);
 	if(Attribute == GetHealthAttribute())
 	{
-		NewValue = FMath::Clamp(NewValue,0,GetMaxHealth());
+		NewValue = FMath::Clamp(NewValue, 0, GetMaxHealth());
 	}
 	if(Attribute == GetManaAttribute())
 	{
-		NewValue = FMath::Clamp(NewValue,0,GetMaxMana());
+		NewValue = FMath::Clamp(NewValue, 0, GetMaxMana());
 	}
 }
 
@@ -138,12 +139,13 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 	}
 }
 
-// 应用GE的效果
+// 应用GE的效果,也是在服务端进行的
 void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
 	FEffectProperties Props;
 	SetEffectProperties(Data,Props);
+	
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		// GEngine->AddOnScreenDebugMessage(1,2.0f,FColor::Red,FString::Printf(TEXT("NewValue : %f"),GetHealth()));
@@ -193,7 +195,8 @@ void UAuraAttributeSet::ShowFloatingDamageText(const FEffectProperties& Props, f
 {
 	if(Props.SourceCharacter != Props.TargetCharacter)
 	{
-		if(AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)))
+		// UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)
+		if(AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(Props.SourceCharacter->Controller))
 		{
 			AuraPlayerController->ShowDamageText(Damage, Props.TargetCharacter,bBlocked, bCriticalHit);
 		}

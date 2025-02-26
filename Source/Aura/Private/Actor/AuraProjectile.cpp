@@ -19,13 +19,14 @@ AAuraProjectile::AAuraProjectile()
 	bReplicates = true; // 启用网络复制，只有服务器能够生成，然后同步到客户端上面
 	
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
+	SetRootComponent(Sphere);
 	Sphere->SetCollisionObjectType(ECC_Projectile);
+	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Sphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic,ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldStatic,ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_Pawn,ECR_Overlap);
-	SetRootComponent(Sphere);
-
+	
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovement");
 	ProjectileMovement->InitialSpeed = 550.f;
 	ProjectileMovement->MaxSpeed = 550.f;
@@ -37,22 +38,31 @@ void AAuraProjectile::BeginPlay()
 	Super::BeginPlay();
 	SetLifeSpan(LifeSpan);
 	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AAuraProjectile::OnSphereOverlap);
-	// UGameplayStatics::PlaySoundAtLocation(this,LoopingSound,GetActorLocation(),FRotator::ZeroRotator);
+
 	LoopingAudioComponent = UGameplayStatics::SpawnSoundAttached(LoopingSound, GetRootComponent());
 }
 
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(),FRotator::ZeroRotator);
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect,GetActorLocation());
-	LoopingAudioComponent->Stop();
+	// 避免和施法者发生碰撞
+	if(DamageEffectSpecHandle.Data.IsValid() && DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() == OtherActor)
+	{
+		return;
+	}
+	
+	if(!bHit)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(),FRotator::ZeroRotator);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect,GetActorLocation());
+		if(LoopingAudioComponent) LoopingAudioComponent->Stop();
+	}
 	if(HasAuthority())
 	{
 		// Apply Effect
-		if(UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
+		if(UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
 		{
-			ASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
+			TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
 		}
 		Destroy();
 	}
@@ -69,7 +79,7 @@ void AAuraProjectile::Destroyed()
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(),FRotator::ZeroRotator);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect,GetActorLocation());
-		LoopingAudioComponent->Stop();
+		if(LoopingAudioComponent) LoopingAudioComponent->Stop();
 	}
 	Super::Destroyed();
 }

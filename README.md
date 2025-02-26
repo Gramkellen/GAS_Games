@@ -106,9 +106,19 @@ AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(GetWor
 
 ### 待修复Bug
 
-Enemy只有一种类型可以被标记，另外一个弹弓的Enemy无法被标记  ✅ 
+#### 服务器客户端模式时，火球消失了
 
-- Collision设置Visibility的碰撞 
+https://blog.csdn.net/qq_30100043/article/details/138033334
+
+因为火球创建还没有Spawn就EndAbility，导致没有发射
+
+**解决方案：**在蓝图当中Delay一下
+
+ **探索问题：？？？ 可是很奇怪，服务器会调用吗？？？**
+
+#### 客户端的敌人的血条不显示和更新
+
+#### 双客户端模式，FireBlot刚出去就爆炸了
 
 ## 开发疑惑点
 

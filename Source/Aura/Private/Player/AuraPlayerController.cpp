@@ -85,7 +85,7 @@ FHitResult AAuraPlayerController::GetCursorHit() const
 
 void AAuraPlayerController::ShowDamageText_Implementation(float DamageValue, ACharacter* TargetCharacter, bool bBlocked, bool bCriticalHit)
 {
-	if(IsValid(TargetCharacter) && DamageTextComponentClass)
+	if(IsValid(TargetCharacter) && DamageTextComponentClass && IsLocalController())
 	{
 		UDamageTextComponent* DamageTextComponent = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
 		DamageTextComponent->RegisterComponent();  // 动态创建的话需要进行注册

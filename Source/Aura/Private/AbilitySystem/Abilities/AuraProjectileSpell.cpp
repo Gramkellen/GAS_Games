@@ -4,8 +4,6 @@
 #include "AbilitySystem/Abilities/AuraProjectileSpell.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "Projects.h"
-#include "AbilitySystem/AuraGameplayTags.h"
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
 
@@ -20,9 +18,9 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		const FVector StartLocation(CombatInterface->GetWeaponSocketLocation());
 		SpawnTransform.SetLocation(StartLocation);
 		// 这里就是获取Direction的数据然后设置旋转
-		FRotator TargetRotation((ProjectileTargetLocation - StartLocation).GetSafeNormal().Rotation());
-		TargetRotation.Pitch = 0.f;
+		FRotator TargetRotation((ProjectileTargetLocation - StartLocation).Rotation());
 		SpawnTransform.SetRotation(TargetRotation.Quaternion());
+
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
 			ProjectileClass,
 			SpawnTransform,
@@ -33,7 +31,8 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		// Apply DamageEffect and DeBuff
 		const float Level = GetAbilityLevel();
 		UAbilitySystemComponent* SourceASC =  UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
-		const FGameplayEffectContextHandle ContextHandle =  SourceASC->MakeEffectContext();
+		FGameplayEffectContextHandle ContextHandle =  SourceASC->MakeEffectContext();
+		ContextHandle.AddSourceObject(Projectile);
 		const FGameplayEffectSpecHandle DamageSpecHandle =  SourceASC->MakeOutgoingSpec(DamageEffectClass,Level,ContextHandle);
 
 		// 获取所有的Tags
@@ -42,9 +41,11 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		{
 			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle,Pair.Key, Pair.Value.GetValueAtLevel(Level));
 		}
-		
-		const FGameplayEffectSpecHandle DeBuffSpecHandle = SourceASC->MakeOutgoingSpec(DeBuffEffectClass,Level,ContextHandle);
+
 		Projectile->DamageEffectSpecHandle = DamageSpecHandle;
+
+		//add Debuff
+		const FGameplayEffectSpecHandle DeBuffSpecHandle = SourceASC->MakeOutgoingSpec(DeBuffEffectClass,Level,ContextHandle);
 		if(DeBuffSpecHandle.IsValid() && DeBuffSpecHandle.Data.IsValid())
 		{
 			SourceASC->ApplyGameplayEffectSpecToSelf(*DeBuffSpecHandle.Data.Get());  // 释放Ability就减少Mana

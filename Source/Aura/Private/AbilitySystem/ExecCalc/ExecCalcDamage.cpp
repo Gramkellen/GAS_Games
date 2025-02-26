@@ -116,7 +116,7 @@ void UExecCalcDamage::Execute_Implementation(const FGameplayEffectCustomExecutio
 	// 这里用 AuraDamageStatics()而不是DamageStatics() 是因为 而不是DamageStatics()初始化时 FAuraGameplayTags还没有，导致数组没东西
 	for(const TTuple<FGameplayTag, FGameplayTag>&Pair : FAuraGameplayTags::Get().DamageTypestoResistance)
 	{
-		float DamageValue = EffectSpec.GetSetByCallerMagnitude(Pair.Key);
+		float DamageValue = EffectSpec.GetSetByCallerMagnitude(Pair.Key, false, 0.f);
 		checkf(AuraDamageStatics().TagsCaptureDef.Contains(Pair.Value), TEXT("There is not Contains"));
 		FGameplayEffectAttributeCaptureDefinition CaptureDef = AuraDamageStatics().TagsCaptureDef[Pair.Value];
 		float Resistance = 0.f;

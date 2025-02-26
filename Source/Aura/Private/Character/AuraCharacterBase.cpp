@@ -13,12 +13,14 @@ AAuraCharacterBase::AAuraCharacterBase()
 	PrimaryActorTick.bCanEverTick = false;
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(),FName("WeaponHandleSocket"));
+	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);   // 设置 Overlap的事件
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
 	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
+	
 }
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const

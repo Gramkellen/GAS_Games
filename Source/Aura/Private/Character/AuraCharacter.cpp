@@ -48,10 +48,11 @@ void AAuraCharacter::InitAbilityActorInfo()
 	check(AuraPlayerState);
 	// 这里对应的其实是拥有者和表现者
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState,this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttribute();
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-	if(AAuraPlayerController * AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
+	
+	if(AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
 		if(AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
 		{
