@@ -7,7 +7,10 @@
 #include "AbilitySystem/AuraAbilitySystemFunctionLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/AuraGameplayTags.h"
+#include "AI/AuraAIController.h"
 #include "Aura/Aura.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
@@ -26,6 +29,16 @@ AAuraEnemy::AAuraEnemy():LifeSpan(5.f)   //HealthBarWidth(135.f),HealthBarHeight
 	HealthBar->SetupAttachment(GetRootComponent());
 	HealthBar->SetDrawAtDesiredSize(true);
 	HealthBar->SetRelativeLocation(FVector(0.f,0.f,70.f));
+}
+
+void AAuraEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if(!HasAuthority()) return ;
+	AuraAIController = Cast<AAuraAIController>(NewController);
+	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	AuraAIController->RunBehaviorTree(BehaviorTree);
 }
 
 void AAuraEnemy::OnHighlightActor()
@@ -52,7 +65,10 @@ void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-	if(HasAuthority()) InitializeAttributeDefaults();
+	if(HasAuthority())
+	{
+		InitializeAttributeDefaults();
+	}
 }
 
 int32 AAuraEnemy::GetPlayerLevel()
