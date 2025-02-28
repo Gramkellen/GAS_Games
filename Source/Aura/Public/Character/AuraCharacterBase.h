@@ -59,10 +59,10 @@ protected:
 	UPROPERTY(EditAnywhere,Category="Combat")
 	FName WeaponTipSocketName;
 
-	UPROPERTY(VisibleAnywhere,Category ="AbilitySystem")
+	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
-	UPROPERTY(VisibleAnywhere,Category="AbilitySystem")
+	UPROPERTY()
 	TObjectPtr<UAttributeSet>AttributeSet;
 
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category = "Attributes")

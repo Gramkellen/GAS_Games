@@ -15,16 +15,16 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
 
-AAuraEnemy::AAuraEnemy():LifeSpan(5.f)   //HealthBarWidth(135.f),HealthBarHeight(13.f)
+AAuraEnemy::AAuraEnemy():LifeSpan(5.f)   
 {
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility,ECR_Block);
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
-
-
+	check(AttributeSet);
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
 	HealthBar->SetDrawAtDesiredSize(true);
@@ -76,11 +76,6 @@ int32 AAuraEnemy::GetPlayerLevel()
 	return Level;
 }
 
-void AAuraEnemy::AttributeChangedDelegateBind()
-{
-	
-}
-
 void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCount)
 {
 	bHitReacting = NewCount > 0;
@@ -104,7 +99,6 @@ void AAuraEnemy::BeginPlay()
 		// 服务器才能进行属性初始化,因为GameMode只能在服务器进行获取，客户端获取为nullptr会导致error
 		UAuraAbilitySystemFunctionLibrary::InitializeCommonAbilities(this,AbilitySystemComponent);
 	}
-
 	
 	// 绑定 HealthBar的 WidgetController
 	if(UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
@@ -112,19 +106,21 @@ void AAuraEnemy::BeginPlay()
 		AuraUserWidget->SetWidgetController(this);
 	}
 	// 绑定属性变化的委托事件
-	if(const UAuraAttributeSet* AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet))
+	if(const UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(AttributeSet))
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnHealthChangedDelegate.Broadcast(Data.NewValue);
-			});
+			}
+		);
 		
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
-			});
+			}
+		);
 
 		// 与指定GameplayTag相关事件发生时进行回调
 		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact,

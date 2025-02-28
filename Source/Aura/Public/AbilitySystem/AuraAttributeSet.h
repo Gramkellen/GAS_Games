@@ -128,8 +128,8 @@ public:
 	FGameplayAttributeData ManaRegeneration;  // 法力值恢复
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,ManaRegeneration);
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxHealth, Category = "Attributes|Secondary Attribute")
-	FGameplayAttributeData MaxHealth;  // 最大生命值
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxHealth, Category = "Attributes|Vital Attribute")
+	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHealth);
 	
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = Rep_MaxMana, Category = "Attributes|Secondary Attribute")

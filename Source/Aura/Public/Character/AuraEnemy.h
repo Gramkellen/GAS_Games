@@ -34,8 +34,6 @@ public:
 
 	virtual void Died() override;
 
-	void AttributeChangedDelegateBind();
-
 	void HitReactTagChanged(const FGameplayTag CallBackTag, int32 NewCount);
 	
 	UPROPERTY(BlueprintReadOnly, Category="Combat")
@@ -48,10 +46,11 @@ public:
 	float LifeSpan;
 
 	UPROPERTY(BlueprintAssignable)
-	FAttributeChangedDelegate OnHealthChangedDelegate;
+	FOnAttributeChangedSignature OnHealthChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable)
-	FAttributeChangedDelegate OnMaxHealthChangedDelegate;
+	FOnAttributeChangedSignature OnMaxHealthChangedDelegate;
+
 protected:
 	
 	virtual void BeginPlay() override;

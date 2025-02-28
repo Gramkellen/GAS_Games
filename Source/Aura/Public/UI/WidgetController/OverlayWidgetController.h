@@ -27,8 +27,8 @@ struct FUIWidgetRow : public FTableRowBase
 	
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetDelegate,FUIWidgetRow,MessageWidget);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeChangedDelegate, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidgetRow, Row);
 /**
  * 
  */
@@ -43,19 +43,19 @@ public:
 
 	// 创建委托实例 ，BlueprintAssignable表示委托可以在蓝图中被赋值
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FAttributeChangedDelegate OnHealthChangedDelegate;
+	FOnAttributeChangedSignature OnHealthChangedDelegate;
 	
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FAttributeChangedDelegate OnMaxHealthChangedDelegate;
+	FOnAttributeChangedSignature OnMaxHealthChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FAttributeChangedDelegate OnManaChangedDelegate;
+	FOnAttributeChangedSignature OnManaChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
-	FAttributeChangedDelegate OnMaxManaChangedDelegate;
+	FOnAttributeChangedSignature OnMaxManaChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|Message")
-	FMessageWidgetDelegate MessageWidgetDelegate;
+	FMessageWidgetRowSignature MessageWidgetDelegate;
 
 protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = "GAS|MessageData")

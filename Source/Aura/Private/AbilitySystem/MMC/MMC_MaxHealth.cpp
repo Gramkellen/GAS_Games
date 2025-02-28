@@ -31,12 +31,9 @@ float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffec
 	Vigor = FMath::Max<float>(Vigor,0.f);
 
 	// 可能会没有设置 SourceObject
-	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject()))
-	{
-		const int32 PlayerLevel = CombatInterface->GetPlayerLevel();
-		return 80.f + Vigor * 1.5f + PlayerLevel * 10.f;
-	}
- 
-	return Vigor;
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject());
+	const int32 PlayerLevel = CombatInterface->GetPlayerLevel();
+	
+	return 80.f + Vigor * 1.5f + PlayerLevel * 10.f;
 	
 }

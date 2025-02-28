@@ -48,7 +48,7 @@ void UAuraAbilitySystemFunctionLibrary::InitializeAttributeDefaults(const UObjec
 	FCharacterClassDefaultInfo ClassDefaultInfo =  CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 	
 	// PrimaryAttributes初始化
- 	FGameplayEffectContextHandle PrimaryAttributeContextHandle =  ASC->MakeEffectContext();
+ 	FGameplayEffectContextHandle PrimaryAttributeContextHandle = ASC->MakeEffectContext();
 	PrimaryAttributeContextHandle.AddSourceObject(AvatarActor);  // 不添加SourceActor会导致缺少Effect来源
 	const FGameplayEffectSpecHandle PrimaryAttributeSpecHandle = ASC->MakeOutgoingSpec(ClassDefaultInfo.PrimaryAttributes, Level, PrimaryAttributeContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*PrimaryAttributeSpecHandle.Data.Get());
